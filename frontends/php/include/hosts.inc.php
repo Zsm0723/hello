@@ -1481,3 +1481,53 @@ function renderInterfaceHeaders() {
 				])
 		);
 }
+
+/**
+ * Set or reset hosts filter from request.
+ *
+ * @param string $prefix  Profile prefix.
+ *
+ * @return array
+ */
+function setFilterHosts($prefix) {
+	if (hasRequest('filter_set')) {
+		CProfile::updateArray($prefix.'.filter_hostids', getRequest('filter_hostids', []), PROFILE_TYPE_ID);
+	}
+
+	$filter_hostids = getRequest('filter_hostids', CProfile::getArray($prefix.'.filter_hostids', []));
+
+	if (hasRequest('filter_rst')) {
+		if (count($filter_hostids) != 1) {
+			CProfile::deleteIdx($prefix.'.filter_hostids');
+		}
+	}
+
+	return $filter_hostids;
+}
+
+/**
+ * Get filtered hosts by Ids array and hash for checkboxes.
+ *
+ * @param string $filter_hostids  filtered host Ids.
+ *
+ * @return array
+ */
+function getFilterHosts(array $filter_hostids) {
+	$filter_hosts = [];
+
+	if ($filter_hostids) {
+		$filter_hosts = CArrayHelper::renameObjectsKeys(API::Host()->get([
+			'output' => ['hostid', 'name'],
+			'hostids' => $filter_hostids,
+			'templated_hosts' => true,
+			'editable' => true,
+			'preservekeys' => true
+		]), ['hostid' => 'id']);
+
+		$filter_hostids = array_keys($filter_hosts);
+	}
+
+	sort($filter_hostids);
+
+	return [crc32(implode('', $filter_hostids)), $filter_hosts];
+}

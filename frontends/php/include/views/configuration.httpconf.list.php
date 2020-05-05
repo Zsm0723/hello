@@ -88,8 +88,8 @@ $widget = (new CWidget())
 		))->setAttribute('aria-label', _('Content controls'))
 	);
 
-if (!empty($this->data['hostid'])) {
-	$widget->addItem(get_header_host_table('web', $this->data['hostid']));
+if (!empty($data['hostid'])) {
+	$widget->addItem(get_header_host_table('web', $data['hostid']));
 }
 
 $widget->addItem($filter);
@@ -97,7 +97,7 @@ $widget->addItem($filter);
 // create form
 $httpForm = (new CForm())
 	->setName('scenarios')
-	->addVar('hostid', $this->data['hostid']);
+	->addVar('hostid', $data['hostid']);
 
 $url = (new CUrl('httpconf.php'))->getUrl();
 
@@ -106,7 +106,7 @@ $httpTable = (new CTableInfo())
 		(new CColHeader(
 			(new CCheckBox('all_httptests'))->onClick("checkAll('".$httpForm->getName()."', 'all_httptests', 'group_httptestid');")
 		))->addClass(ZBX_STYLE_CELL_WIDTH),
-		($this->data['hostid'] == 0)
+		($data['hostid'] == 0)
 			? make_sorting_header(_('Host'), 'hostname', $data['sort'], $data['sortorder'], $url)
 			: null,
 		make_sorting_header(_('Name'), 'name', $data['sort'], $data['sortorder'], $url),
@@ -117,11 +117,11 @@ $httpTable = (new CTableInfo())
 		_('HTTP proxy'),
 		_('Application'),
 		make_sorting_header(_('Status'), 'status', $data['sort'], $data['sortorder'], $url),
-		$this->data['showInfoColumn'] ? _('Info') : null
+		$data['showInfoColumn'] ? _('Info') : null
 	]);
 
-$httpTestsLastData = $this->data['httpTestsLastData'];
-$httpTests = $this->data['httpTests'];
+$httpTestsLastData = $data['httpTestsLastData'];
+$httpTests = $data['httpTests'];
 
 foreach ($httpTests as $httpTestId => $httpTest) {
 	$name = [];
@@ -133,7 +133,7 @@ foreach ($httpTests as $httpTestId => $httpTest) {
 			->setArgument('httptestid', $httpTestId)
 	);
 
-	if ($this->data['showInfoColumn']) {
+	if ($data['showInfoColumn']) {
 		$info_icons = [];
 		if($httpTest['status'] == HTTPTEST_STATUS_ACTIVE && isset($httpTestsLastData[$httpTestId]) && $httpTestsLastData[$httpTestId]['lastfailedstep']) {
 			$lastData = $httpTestsLastData[$httpTestId];
@@ -156,7 +156,7 @@ foreach ($httpTests as $httpTestId => $httpTest) {
 
 	$httpTable->addRow([
 		new CCheckBox('group_httptestid['.$httpTest['httptestid'].']', $httpTest['httptestid']),
-		($this->data['hostid'] > 0) ? null : $httpTest['hostname'],
+		($data['hostid'] > 0) ? null : $httpTest['hostname'],
 		$name,
 		$httpTest['stepscnt'],
 		$httpTest['delay'],
@@ -176,14 +176,14 @@ foreach ($httpTests as $httpTestId => $httpTest) {
 			->addClass(ZBX_STYLE_LINK_ACTION)
 			->addClass(httptest_status2style($httpTest['status']))
 			->addSID(),
-		$this->data['showInfoColumn'] ? makeInformationList($info_icons) : null
+		$data['showInfoColumn'] ? makeInformationList($info_icons) : null
 	]);
 }
 
 // append table to form
 $httpForm->addItem([
 	$httpTable,
-	$this->data['paging'],
+	$data['paging'],
 	new CActionButtonList('action', 'group_httptestid',
 		[
 			'httptest.massenable' => ['name' => _('Enable'), 'confirm' => _('Enable selected web scenarios?')],
@@ -193,7 +193,7 @@ $httpForm->addItem([
 			],
 			'httptest.massdelete' => ['name' => _('Delete'), 'confirm' => _('Delete selected web scenarios?')]
 		],
-		$this->data['hostid']
+		$data['checkbox_hash']
 	)
 ]);
 

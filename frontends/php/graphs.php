@@ -144,6 +144,8 @@ elseif ($hostid && !isWritableHostTemplates([$hostid])) {
 	access_deny();
 }
 
+list($checkbox_hash, $filter_hosts) = getFilterHosts(setFilterHosts('web.graphs'));
+
 /*
  * Actions
  */
@@ -224,7 +226,7 @@ elseif (hasRequest('add') || hasRequest('update')) {
 			$messageFailed = _('Cannot add graph prototype');
 		}
 
-		$cookieId = getRequest('parent_discoveryid');
+		$prefix = getRequest('parent_discoveryid');
 	}
 	// create and update graphs
 	else {
@@ -242,7 +244,7 @@ elseif (hasRequest('add') || hasRequest('update')) {
 			$messageFailed = _('Cannot add graph');
 		}
 
-		$cookieId = $hostid;
+		$prefix = $checkbox_hash;
 	}
 
 	if ($result) {
@@ -261,7 +263,7 @@ elseif (hasRequest('add') || hasRequest('update')) {
 	$result = DBend($result);
 
 	if ($result) {
-		uncheckTableRows($cookieId);
+		uncheckTableRows($prefix);
 	}
 	show_messages($result, $messageSuccess, $messageFailed);
 }
@@ -280,7 +282,7 @@ elseif (hasRequest('delete') && hasRequest('graphid')) {
 		$result = API::Graph()->delete([$graphId]);
 
 		if ($result) {
-			uncheckTableRows($hostid);
+			uncheckTableRows($checkbox_hash);
 		}
 		show_messages($result, _('Graph deleted'), _('Cannot delete graph'));
 	}
@@ -313,7 +315,7 @@ elseif (hasRequest('action') && getRequest('action') === 'graph.massdelete' && h
 		$result = API::Graph()->delete($graphIds);
 
 		if ($result) {
-			uncheckTableRows($hostid);
+			uncheckTableRows($checkbox_hash);
 		}
 		else {
 			$graphs = API::Graph()->get([
@@ -322,7 +324,7 @@ elseif (hasRequest('action') && getRequest('action') === 'graph.massdelete' && h
 				'editable' => true
 			]);
 
-			uncheckTableRows($hostid, zbx_objectValues($graphs, 'graphid'));
+			uncheckTableRows($checkbox_hash, zbx_objectValues($graphs, 'graphid'));
 		}
 		show_messages($result, _('Graphs deleted'), _('Cannot delete graphs'));
 	}
@@ -377,7 +379,7 @@ elseif (hasRequest('action') && getRequest('action') === 'graph.masscopyto' && h
 
 		if ($result) {
 			uncheckTableRows(
-				(getRequest('parent_discoveryid') == 0) ? $hostid : getRequest('parent_discoveryid')
+				(getRequest('parent_discoveryid') == 0) ? $checkbox_hash : getRequest('parent_discoveryid')
 			);
 			unset($_REQUEST['group_graphid']);
 		}
@@ -403,15 +405,9 @@ CProfile::update('web.'.$page['file'].'.sortorder', $sort_order, PROFILE_TYPE_ST
 
 if (hasRequest('filter_set')) {
 	CProfile::updateArray('web.graphs.filter_groups', getRequest('filter_groups', []), PROFILE_TYPE_ID);
-	CProfile::updateArray('web.graphs.filter_hostids', getRequest('filter_hostids', []), PROFILE_TYPE_ID);
 }
 elseif (hasRequest('filter_rst')) {
 	CProfile::deleteIdx('web.graphs.filter_groups');
-
-	$filter_hostids = getRequest('filter_hostids', CProfile::getArray('web.graphs.filter_hostids', []));
-	if (count($filter_hostids) != 1) {
-		CProfile::deleteIdx('web.graphs.filter_hostids');
-	}
 }
 
 /*
@@ -427,7 +423,7 @@ if (hasRequest('parent_discoveryid')) {
 else {
 	$filter = [
 		'groups' => CProfile::getArray('web.graphs.filter_groups', null),
-		'hosts' => CProfile::getArray('web.graphs.filter_hostids', null)
+		'hosts' => $filter_hosts
 	];
 }
 
@@ -447,17 +443,6 @@ if ($filter_groupids) {
 	$filter_groupids = getSubGroups($filter_groupids);
 }
 
-// Get hosts.
-$filter['hosts'] = $filter['hosts']
-	? CArrayHelper::renameObjectsKeys(API::Host()->get([
-		'output' => ['hostid', 'name'],
-		'hostids' => $filter['hosts'],
-		'templated_hosts' => true,
-		'editable' => true,
-		'preservekeys' => true
-	]), ['hostid' => 'id'])
-	: [];
-
 // Get hostid.
 if ($hostid == 0 && count($filter['hosts']) == 1) {
 	$hostid = reset($filter['hosts'])['id'];
@@ -474,6 +459,7 @@ elseif (isset($_REQUEST['form'])) {
 	$data = [
 		'form' => getRequest('form'),
 		'form_refresh' => getRequest('form_refresh', 0),
+		'checkbox_hash' => $checkbox_hash,
 		'graphid' => getRequest('graphid', 0),
 		'parent_discoveryid' => getRequest('parent_discoveryid'),
 		'group_gid' => getRequest('group_gid', []),
@@ -651,11 +637,12 @@ else {
 
 	$data = [
 		'filter' => $filter,
-		'hostid' => $hostid,
+		'hostid' => (count($filter['hosts']) === 1) ? $hostid : 0,
 		'parent_discoveryid' => hasRequest('parent_discoveryid') ? $discoveryRule['itemid'] : null,
 		'graphs' => [],
 		'sort' => $sort_field,
 		'sortorder' => $sort_order,
+		'checkbox_hash' => $checkbox_hash,
 		'profileIdx' => 'web.graphs.filter',
 		'active_tab' => CProfile::get('web.graphs.filter.active', 1)
 	];

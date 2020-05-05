@@ -77,7 +77,7 @@ $applicationTable = (new CTableInfo())
 			(new CCheckBox('all_applications'))
 				->onClick("checkAll('".$form->getName()."', 'all_applications', 'applications');")
 		))->addClass(ZBX_STYLE_CELL_WIDTH),
-		($this->data['hostid'] > 0) ? null : _('Host'),
+		($data['hostid'] > 0) ? null : _('Host'),
 		make_sorting_header(_('Application'), 'name', $this->data['sort'], $this->data['sortorder'],
 			(new CUrl('applications.php'))->getUrl()
 		),
@@ -111,8 +111,7 @@ foreach ($data['applications'] as $application) {
 	}
 	else {
 		$name = new CLink($application['name'],
-			'applications.php?form=update&applicationid='.$application['applicationid'].
-				'&hostid='.$application['hostid']
+			'applications.php?form=update&applicationid='.$application['applicationid']
 		);
 	}
 
@@ -121,7 +120,7 @@ foreach ($data['applications'] as $application) {
 
 	$applicationTable->addRow([
 		$checkBox,
-		($this->data['hostid'] > 0) ? null : $application['host']['name'],
+		($data['hostid'] > 0) ? null : $application['host']['name'],
 		(new CCol($name))->addClass(ZBX_STYLE_NOWRAP),
 		[
 			new CLink(
@@ -140,14 +139,14 @@ foreach ($data['applications'] as $application) {
 // append table to form
 $form->addItem([
 	$applicationTable,
-	$this->data['paging'],
+	$data['paging'],
 	new CActionButtonList('action', 'applications',
 		[
 			'application.massenable' => ['name' => _('Enable'), 'confirm' => _('Enable selected applications?')],
 			'application.massdisable' => ['name' => _('Disable'), 'confirm' => _('Disable selected applications?')],
 			'application.massdelete' => ['name' => _('Delete'), 'confirm' => _('Delete selected applications?')]
 		],
-		$this->data['hostid']
+		$data['checkbox_hash']
 	)
 ]);
 

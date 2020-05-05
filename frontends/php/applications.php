@@ -75,61 +75,7 @@ elseif (getRequest('hostid') && !isWritableHostTemplates([getRequest('hostid')])
 	access_deny();
 }
 
-/**
- * Select filters.
- */
-$sort_field = getRequest('sort', CProfile::get('web.'.$page['file'].'.sort', 'name'));
-$sort_order = getRequest('sortorder', CProfile::get('web.'.$page['file'].'.sortorder', ZBX_SORT_UP));
-
-CProfile::update('web.'.$page['file'].'.sort', $sort_field, PROFILE_TYPE_STR);
-CProfile::update('web.'.$page['file'].'.sortorder', $sort_order, PROFILE_TYPE_STR);
-
-if (hasRequest('filter_set')) {
-	CProfile::updateArray('web.applications.filter_groups', getRequest('filter_groups', []), PROFILE_TYPE_ID);
-	CProfile::updateArray('web.applications.filter_hostids', getRequest('filter_hostids', []), PROFILE_TYPE_ID);
-}
-elseif (hasRequest('filter_rst')) {
-	CProfile::deleteIdx('web.applications.filter_groups');
-
-	$filter_hostids = getRequest('filter_hostids', CProfile::getArray('web.applications.filter_hostids', []));
-	if (count($filter_hostids) != 1) {
-		CProfile::deleteIdx('web.applications.filter_hostids');
-	}
-}
-
-$filter = [
-	'groups' => CProfile::getArray('web.applications.filter_groups', null),
-	'hosts' => CProfile::getArray('web.applications.filter_hostids', null)
-];
-
-// Get host groups.
-$filter['groups'] = $filter['groups']
-	? CArrayHelper::renameObjectsKeys(API::HostGroup()->get([
-		'output' => ['groupid', 'name'],
-		'groupids' => $filter['groups'],
-		'with_hosts_and_templates' => true,
-		'editable' => true,
-		'preservekeys' => true
-	]), ['groupid' => 'id'])
-	: [];
-
-$filter_groupids = $filter['groups'] ? array_keys($filter['groups']) : null;
-if ($filter_groupids) {
-	$filter_groupids = getSubGroups($filter_groupids);
-}
-
-// Get hosts.
-$filter['hosts'] = $filter['hosts']
-	? CArrayHelper::renameObjectsKeys(API::Host()->get([
-		'output' => ['hostid', 'name'],
-		'hostids' => $filter['hosts'],
-		'templated_hosts' => true,
-		'editable' => true,
-		'preservekeys' => true
-	]), ['hostid' => 'id'])
-	: [];
-
-$hostid = (count($filter['hosts']) == 1) ? reset($filter['hosts'])['id'] : getRequest('hostid', 0);
+list($checkbox_hash, $filter_hosts) = getFilterHosts(setFilterHosts('web.applications'));
 
 /**
  * Do uncheck.
@@ -145,7 +91,7 @@ if (hasRequest('action')) {
 			'editable' => true
 		]);
 		if (count($applications) != count(getRequest('applications'))) {
-			uncheckTableRows($hostid, zbx_objectValues($applications, 'applicationid'));
+			uncheckTableRows($checkbox_hash, zbx_objectValues($applications, 'applicationid'));
 		}
 	}
 }
@@ -172,7 +118,7 @@ if (hasRequest('add') || hasRequest('update')) {
 	}
 
 	if ($result) {
-		uncheckTableRows($hostid);
+		uncheckTableRows($checkbox_hash);
 		unset($_REQUEST['form']);
 	}
 }
@@ -184,7 +130,7 @@ elseif (hasRequest('delete') && hasRequest('applicationid')) {
 	$result = (bool) API::Application()->delete([getRequest('applicationid')]);
 
 	if ($result) {
-		uncheckTableRows(getRequest('hostid'));
+		uncheckTableRows($checkbox_hash);
 		unset($_REQUEST['form'], $_REQUEST['applicationid']);
 	}
 	show_messages($result, _('Application deleted'), _('Cannot delete application'));
@@ -195,7 +141,7 @@ elseif (hasRequest('action') && getRequest('action') == 'application.massdelete'
 	$result = (bool) API::Application()->delete($applicationids);
 
 	if ($result) {
-		uncheckTableRows($hostid);
+		uncheckTableRows($checkbox_hash);
 	}
 	show_messages($result,
 		_n('Application deleted', 'Applications deleted', count($applicationids)),
@@ -219,7 +165,7 @@ elseif (hasRequest('applications')
 	$result = (bool) API::Item()->update($items);
 
 	if ($result) {
-		uncheckTableRows($hostid);
+		uncheckTableRows($checkbox_hash);
 	}
 
 	$updated = count($items);
@@ -241,7 +187,8 @@ if (isset($_REQUEST['form'])) {
 	$data = [
 		'applicationid' => getRequest('applicationid'),
 		'form' => getRequest('form'),
-		'form_refresh' => getRequest('form_refresh', 0)
+		'form_refresh' => getRequest('form_refresh', 0),
+		'checkbox_hash' => $checkbox_hash
 	];
 
 	if (isset($data['applicationid']) && !isset($_REQUEST['form_refresh'])) {
@@ -260,12 +207,51 @@ if (isset($_REQUEST['form'])) {
 	echo (new CView('configuration.application.edit', $data))->getOutput();
 }
 else {
+	/**
+	 * Select filters.
+	 */
+	$sort_field = getRequest('sort', CProfile::get('web.'.$page['file'].'.sort', 'name'));
+	$sort_order = getRequest('sortorder', CProfile::get('web.'.$page['file'].'.sortorder', ZBX_SORT_UP));
+
+	CProfile::update('web.'.$page['file'].'.sort', $sort_field, PROFILE_TYPE_STR);
+	CProfile::update('web.'.$page['file'].'.sortorder', $sort_order, PROFILE_TYPE_STR);
+
+	if (hasRequest('filter_set')) {
+		CProfile::updateArray('web.applications.filter_groups', getRequest('filter_groups', []), PROFILE_TYPE_ID);
+	}
+	elseif (hasRequest('filter_rst')) {
+		CProfile::deleteIdx('web.applications.filter_groups');
+	}
+
+	$filter = [
+		'groups' => CProfile::getArray('web.applications.filter_groups', null),
+		'hosts' => $filter_hosts
+	];
+
+	// Get host groups.
+	$filter['groups'] = $filter['groups']
+		? CArrayHelper::renameObjectsKeys(API::HostGroup()->get([
+			'output' => ['groupid', 'name'],
+			'groupids' => $filter['groups'],
+			'with_hosts_and_templates' => true,
+			'editable' => true,
+			'preservekeys' => true
+		]), ['groupid' => 'id'])
+		: [];
+
+	$filter_groupids = $filter['groups'] ? array_keys($filter['groups']) : null;
+	if ($filter_groupids) {
+		$filter_groupids = getSubGroups($filter_groupids);
+	}
 
 	$data = [
+		'hostid' => (count($filter['hosts']) == 1)
+			? reset($filter['hosts'])['id']
+			: getRequest('hostid', 0),
 		'filter' => $filter,
 		'sort' => $sort_field,
 		'sortorder' => $sort_order,
-		'hostid' => $hostid,
+		'checkbox_hash' => $checkbox_hash,
 		'showInfoColumn' => false,
 		'profileIdx' => 'web.applications.filter',
 		'active_tab' => CProfile::get('web.applications.filter.active', 1)

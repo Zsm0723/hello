@@ -22,8 +22,7 @@
 /**
  * @var CView $this
  */
-
-if (!empty($this->data['parent_discoveryid'])) {
+if (!empty($data['parent_discoveryid'])) {
 	$widget = (new CWidget())
 		->setTitle(_('Graph prototypes'))
 		->setControls(
@@ -36,7 +35,7 @@ if (!empty($this->data['parent_discoveryid'])) {
 				))
 			))->setAttribute('aria-label', _('Content controls'))
 		)
-		->addItem(get_header_host_table('graphs', $this->data['hostid'], $this->data['parent_discoveryid']));
+		->addItem(get_header_host_table('graphs', $data['hostid'], $data['parent_discoveryid']));
 }
 else {
 	$widget = (new CWidget())
@@ -53,8 +52,8 @@ else {
 				->setAttribute('aria-label', _('Content controls'))
 		);
 
-	if (!empty($this->data['hostid'])) {
-		$widget->addItem(get_header_host_table('graphs', $this->data['hostid']));
+	if (!empty($data['hostid'])) {
+		$widget->addItem(get_header_host_table('graphs', $data['hostid']));
 	}
 
 	// Add filter tab.
@@ -109,9 +108,9 @@ else {
 // create form
 $graphForm = (new CForm())
 	->setName('graphForm')
-	->addVar('hostid', $this->data['hostid']);
-if (!empty($this->data['parent_discoveryid'])) {
-	$graphForm->addVar('parent_discoveryid', $this->data['parent_discoveryid']);
+	->addVar('hostid', $data['hostid']);
+if (!empty($data['parent_discoveryid'])) {
+	$graphForm->addVar('parent_discoveryid', $data['parent_discoveryid']);
 }
 
 // create table
@@ -122,18 +121,18 @@ $graphTable = (new CTableInfo())
 		(new CColHeader(
 			(new CCheckBox('all_graphs'))->onClick("checkAll('".$graphForm->getName()."', 'all_graphs', 'group_graphid');")
 		))->addClass(ZBX_STYLE_CELL_WIDTH),
-		!empty($this->data['hostid']) ? null : _('Hosts'),
-		make_sorting_header(_('Name'), 'name', $this->data['sort'], $this->data['sortorder'], $url),
+		!empty($data['hostid']) ? null : _('Hosts'),
+		make_sorting_header(_('Name'), 'name', $data['sort'], $data['sortorder'], $url),
 		_('Width'),
 		_('Height'),
-		make_sorting_header(_('Graph type'), 'graphtype', $this->data['sort'], $this->data['sortorder'], $url)
+		make_sorting_header(_('Graph type'), 'graphtype', $data['sort'], $data['sortorder'], $url)
 	]);
 
 foreach ($data['graphs'] as $graph) {
 	$graphid = $graph['graphid'];
 
 	$hostList = null;
-	if (empty($this->data['hostid'])) {
+	if (empty($data['hostid'])) {
 		$hostList = [];
 		foreach ($graph['hosts'] as $host) {
 			$hostList[$host['name']] = $host['name'];
@@ -167,10 +166,6 @@ foreach ($data['graphs'] as $graph) {
 		->setArgument('parent_discoveryid', $data['parent_discoveryid'])
 		->setArgument('graphid', $graphid);
 
-	if ($data['parent_discoveryid'] === null) {
-		$url->setArgument('filter_hostids', [$data['hostid']]);
-	}
-
 	$name[] = new CLink(CHtml::encode($graph['name']), $url);
 
 	$graphTable->addRow([
@@ -185,10 +180,10 @@ foreach ($data['graphs'] as $graph) {
 
 // buttons
 $buttonsArray = [];
-if (!$this->data['parent_discoveryid']) {
+if (!$data['parent_discoveryid']) {
 	$buttonsArray['graph.masscopyto'] = ['name' => _('Copy')];
 }
-$buttonsArray['graph.massdelete'] = ['name' => _('Delete'), 'confirm' => $this->data['parent_discoveryid']
+$buttonsArray['graph.massdelete'] = ['name' => _('Delete'), 'confirm' => $data['parent_discoveryid']
 	? _('Delete selected graph prototypes?')
 	: _('Delete selected graphs?')
 ];
@@ -196,11 +191,11 @@ $buttonsArray['graph.massdelete'] = ['name' => _('Delete'), 'confirm' => $this->
 // append table to form
 $graphForm->addItem([
 	$graphTable,
-	$this->data['paging'],
+	$data['paging'],
 	new CActionButtonList('action', 'group_graphid', $buttonsArray,
-		$this->data['parent_discoveryid']
-			? $this->data['parent_discoveryid']
-			: $this->data['hostid']
+		$data['parent_discoveryid']
+			? $data['parent_discoveryid']
+			: $data['checkbox_hash']
 	)
 ]);
 

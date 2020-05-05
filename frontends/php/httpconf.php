@@ -124,6 +124,8 @@ elseif (getRequest('hostid') && !isWritableHostTemplates([getRequest('hostid')])
 	access_deny();
 }
 
+list($checkbox_hash, $filter_hosts) = getFilterHosts(setFilterHosts('web.httpconf'));
+
 /*
  * Actions
  */
@@ -144,7 +146,7 @@ if (hasRequest('delete') && hasRequest('httptestid')) {
 	$result = DBend($result);
 
 	if ($result) {
-		uncheckTableRows(getRequest('hostid'));
+		uncheckTableRows($checkbox_hash);
 	}
 
 	show_messages($result, _('Web scenario deleted'), _('Cannot delete web scenario'));
@@ -392,7 +394,7 @@ elseif (hasRequest('add') || hasRequest('update')) {
 				throw new Exception();
 			}
 			else {
-				uncheckTableRows(getRequest('hostid'));
+				uncheckTableRows($checkbox_hash);
 			}
 		}
 		else {
@@ -406,7 +408,7 @@ elseif (hasRequest('add') || hasRequest('update')) {
 				throw new Exception();
 			}
 			else {
-				uncheckTableRows(getRequest('hostid'));
+				uncheckTableRows($checkbox_hash);
 			}
 			$httpTestId = reset($result['httptestids']);
 		}
@@ -456,7 +458,7 @@ elseif (hasRequest('action') && str_in_array(getRequest('action'), ['httptest.ma
 		: _n('Cannot disable web scenario', 'Cannot disable web scenarios', $updated);
 
 	if ($result) {
-		uncheckTableRows(getRequest('hostid'));
+		uncheckTableRows($checkbox_hash);
 	}
 
 	show_messages($result, $messageSuccess, $messageFailed);
@@ -496,7 +498,7 @@ elseif (hasRequest('action') && getRequest('action') === 'httptest.massclearhist
 		$result = DBend($result);
 
 		if ($result) {
-			uncheckTableRows(getRequest('hostid'));
+			uncheckTableRows($checkbox_hash);
 		}
 	}
 
@@ -507,7 +509,7 @@ elseif (hasRequest('action') && getRequest('action') === 'httptest.massdelete'
 	$result = API::HttpTest()->delete(getRequest('group_httptestid'));
 
 	if ($result) {
-		uncheckTableRows(getRequest('hostid'));
+		uncheckTableRows($checkbox_hash);
 	}
 	show_messages($result, _('Web scenario deleted'), _('Cannot delete web scenario'));
 }
@@ -519,7 +521,7 @@ if (hasRequest('action') && hasRequest('group_httptestid') && !$result) {
 		'editable' => true
 	]);
 
-	uncheckTableRows(getRequest('hostid'), zbx_objectValues($httptests, 'httptestid'));
+	uncheckTableRows($checkbox_hash, zbx_objectValues($httptests, 'httptestid'));
 }
 
 show_messages();
@@ -533,6 +535,7 @@ if (isset($_REQUEST['form'])) {
 		'httptestid' => getRequest('httptestid'),
 		'form' => getRequest('form'),
 		'form_refresh' => getRequest('form_refresh'),
+		'checkbox_hash' => $checkbox_hash,
 		'templates' => []
 	];
 
@@ -737,22 +740,16 @@ else {
 	if (hasRequest('filter_set')) {
 		CProfile::update('web.httpconf.filter_status', getRequest('filter_status', -1), PROFILE_TYPE_INT);
 		CProfile::updateArray('web.httpconf.filter_groups', getRequest('filter_groups', []), PROFILE_TYPE_ID);
-		CProfile::updateArray('web.httpconf.filter_hostids', getRequest('filter_hostids', []), PROFILE_TYPE_ID);
 	}
 	elseif (hasRequest('filter_rst')) {
 		CProfile::delete('web.httpconf.filter_status');
 		CProfile::deleteIdx('web.httpconf.filter_groups');
-
-		$filter_hostids = getRequest('filter_hostids', CProfile::getArray('web.httpconf.filter_hostids', []));
-		if (count($filter_hostids) != 1) {
-			CProfile::deleteIdx('web.httpconf.filter_hostids');
-		}
 	}
 
 	$filter = [
 		'status' => CProfile::get('web.httpconf.filter_status', -1),
 		'groups' => CProfile::getArray('web.httpconf.filter_groups', null),
-		'hosts' => CProfile::getArray('web.httpconf.filter_hostids', null)
+		'hosts' => $filter_hosts
 	];
 
 	// Get host groups.
@@ -770,17 +767,6 @@ else {
 		$filter_groupids = getSubGroups($filter_groupids);
 	}
 
-	// Get hosts.
-	$filter['hosts'] = $filter['hosts']
-		? CArrayHelper::renameObjectsKeys(API::Host()->get([
-			'output' => ['hostid', 'name'],
-			'hostids' => $filter['hosts'],
-			'templated_hosts' => true,
-			'editable' => true,
-			'preservekeys' => true
-		]), ['hostid' => 'id'])
-		: [];
-
 	$data = [
 		'hostid' => (count($filter['hosts']) == 1)
 			? reset($filter['hosts'])['id']
@@ -791,6 +777,7 @@ else {
 		'paging' => null,
 		'sort' => $sortField,
 		'sortorder' => $sortOrder,
+		'checkbox_hash' => $checkbox_hash,
 		'profileIdx' => 'web.httpconf.filter',
 		'active_tab' => CProfile::get('web.httpconf.filter.active', 1)
 	];
