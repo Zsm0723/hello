@@ -1709,6 +1709,135 @@ static int	DBpatch_4050079(void)
 	return DBadd_field("config", &field);
 }
 
+static int	DBpatch_4050080(void)
+{
+	const ZBX_FIELD	old_field = {"script", "", NULL, NULL, 0, ZBX_TYPE_SHORTTEXT, ZBX_NOTNULL, 0};
+	const ZBX_FIELD	field = {"script", "", NULL, NULL, 0, ZBX_TYPE_TEXT, ZBX_NOTNULL, 0};
+
+	return DBmodify_field_type("media_type", &field, &old_field);
+}
+
+static int	DBpatch_4050081(void)
+{
+	const ZBX_FIELD	old_field = {"oldvalue", "", NULL, NULL, 0, ZBX_TYPE_SHORTTEXT, ZBX_NOTNULL, 0};
+	const ZBX_FIELD	field = {"oldvalue", "", NULL, NULL, 0, ZBX_TYPE_TEXT, ZBX_NOTNULL, 0};
+
+	return DBmodify_field_type("auditlog_details", &field, &old_field);
+}
+
+static int	DBpatch_4050082(void)
+{
+	const ZBX_FIELD	old_field = {"newvalue", "", NULL, NULL, 0, ZBX_TYPE_SHORTTEXT, ZBX_NOTNULL, 0};
+	const ZBX_FIELD	field = {"newvalue", "", NULL, NULL, 0, ZBX_TYPE_TEXT, ZBX_NOTNULL, 0};
+
+	return DBmodify_field_type("auditlog_details", &field, &old_field);
+}
+
+static int	DBpatch_4050083(void)
+{
+	const ZBX_FIELD	field = {"saml_auth_enabled", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050084(void)
+{
+	const ZBX_FIELD	field = {"saml_idp_entityid", "", NULL, NULL, 1024, ZBX_TYPE_CHAR, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050085(void)
+{
+	const ZBX_FIELD	field = {"saml_sso_url", "", NULL, NULL, 2048, ZBX_TYPE_CHAR, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050086(void)
+{
+	const ZBX_FIELD	field = {"saml_slo_url", "", NULL, NULL, 2048, ZBX_TYPE_CHAR, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050087(void)
+{
+	const ZBX_FIELD	field = {"saml_username_attribute", "", NULL, NULL, 128, ZBX_TYPE_CHAR, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050088(void)
+{
+	const ZBX_FIELD	field = {"saml_sp_entityid", "", NULL, NULL, 1024, ZBX_TYPE_CHAR, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050089(void)
+{
+	const ZBX_FIELD	field = {"saml_nameid_format", "", NULL, NULL, 2048, ZBX_TYPE_CHAR, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050090(void)
+{
+	const ZBX_FIELD	field = {"saml_sign_messages", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050091(void)
+{
+	const ZBX_FIELD	field = {"saml_sign_assertions", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050092(void)
+{
+	const ZBX_FIELD	field = {"saml_sign_authn_requests", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050093(void)
+{
+	const ZBX_FIELD	field = {"saml_sign_logout_requests", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050094(void)
+{
+	const ZBX_FIELD	field = {"saml_sign_logout_responses", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050095(void)
+{
+	const ZBX_FIELD	field = {"saml_encrypt_nameid", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050096(void)
+{
+	const ZBX_FIELD	field = {"saml_encrypt_assertions", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
+static int	DBpatch_4050097(void)
+{
+	const ZBX_FIELD	field = {"saml_case_sensitive", "0", NULL, NULL, 0, ZBX_TYPE_INT, ZBX_NOTNULL, 0};
+
+	return DBadd_field("config", &field);
+}
+
 #endif
 
 DBPATCH_START(4050)
@@ -1789,5 +1918,23 @@ DBPATCH_ADD(4050076, 0, 1)
 DBPATCH_ADD(4050077, 0, 1)
 DBPATCH_ADD(4050078, 0, 1)
 DBPATCH_ADD(4050079, 0, 1)
+DBPATCH_ADD(4050080, 0, 1)
+DBPATCH_ADD(4050081, 0, 1)
+DBPATCH_ADD(4050082, 0, 1)
+DBPATCH_ADD(4050083, 0, 1)
+DBPATCH_ADD(4050084, 0, 1)
+DBPATCH_ADD(4050085, 0, 1)
+DBPATCH_ADD(4050086, 0, 1)
+DBPATCH_ADD(4050087, 0, 1)
+DBPATCH_ADD(4050088, 0, 1)
+DBPATCH_ADD(4050089, 0, 1)
+DBPATCH_ADD(4050090, 0, 1)
+DBPATCH_ADD(4050091, 0, 1)
+DBPATCH_ADD(4050092, 0, 1)
+DBPATCH_ADD(4050093, 0, 1)
+DBPATCH_ADD(4050094, 0, 1)
+DBPATCH_ADD(4050095, 0, 1)
+DBPATCH_ADD(4050096, 0, 1)
+DBPATCH_ADD(4050097, 0, 1)
 
 DBPATCH_END()
