@@ -920,7 +920,9 @@ if (hasRequest('hosts') && (getRequest('action') === 'host.massupdateform' || ha
 		'tls_issuer' => getRequest('tls_issuer', ''),
 		'tls_subject' => getRequest('tls_subject', ''),
 		'tls_psk_identity' => getRequest('tls_psk_identity', ''),
-		'tls_psk' => getRequest('tls_psk', '')
+		'tls_psk' => getRequest('tls_psk', ''),
+		'mass_update_groups' => getRequest('mass_update_groups', ZBX_ACTION_ADD),
+		'mass_update_tags' => getRequest('mass_update_tags', ZBX_ACTION_ADD)
 	];
 
 	// sort templates

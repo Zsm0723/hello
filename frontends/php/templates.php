@@ -643,7 +643,9 @@ if (hasRequest('templates') && (getRequest('action') === 'template.massupdatefor
 		'groups' => getRequest('groups', []),
 		'tags' => $tags,
 		'description' => getRequest('description'),
-		'linked_templates' => getRequest('linked_templates', [])
+		'linked_templates' => getRequest('linked_templates', []),
+		'mass_update_groups' => getRequest('mass_update_groups', ZBX_ACTION_ADD),
+		'mass_update_tags' => getRequest('mass_update_tags', ZBX_ACTION_ADD)
 	];
 
 	// sort templates
