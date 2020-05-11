@@ -84,7 +84,7 @@ var CSuggest = Class.create({
 			return true;
 		}
 
-		this.userNeedle = needle;
+		this.userNeedle = target.value;
 		this.needles[needle] = {'needle': needle, 'list': {}};
 
 		var found = false;
@@ -100,7 +100,7 @@ var CSuggest = Class.create({
 
 	// search
 	searchServer: function(needle) {
-		if (needle !== this.userNeedle) {
+		if (needle !== this.userNeedle.toLowerCase()) {
 			return true;
 		}
 
@@ -136,7 +136,7 @@ var CSuggest = Class.create({
 
 		this.needles[params.needle].list = params.list;
 
-		if (needle == this.userNeedle) {
+		if (needle == this.userNeedle.toLowerCase()) {
 			this.showSuggests();
 			this.newSugTab(params.needle);
 		}
@@ -288,6 +288,7 @@ var CSuggest = Class.create({
 		var key = e.keyCode;
 
 		switch (true) {
+			// escape
 			case (key == 27):
 				this.hlIndex = 0;
 				this.suggestCount = 0;
@@ -296,6 +297,7 @@ var CSuggest = Class.create({
 				this.hideSuggests(e);
 				break;
 
+			// enter
 			case (key == 13):
 				if (this.dom.input.value.trim() !== '') {
 					this.needleChange(e);

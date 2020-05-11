@@ -161,7 +161,7 @@ $multiselect-selected-bg-color: #777;
 
 	.dashbrd-grid-new-widget-label {
 		&::before {
-			background: url(../img/icon-sprite.svg) no-repeat -213px -888px;
+			background: url($sprite-path) no-repeat -213px -888px;
 		}
 	}
 }
@@ -169,7 +169,7 @@ $multiselect-selected-bg-color: #777;
 .dashbrd-grid-widget-set-size {
 	.dashbrd-grid-new-widget-label {
 		&::before {
-			background: url(../img/icon-sprite.svg) no-repeat -401px -888px;
+			background: url($sprite-path) no-repeat -401px -888px;
 		}
 	}
 }
@@ -186,10 +186,10 @@ $multiselect-selected-bg-color: #777;
 
 // ICONS
 $var-icons: (
-	maint: url(../img/icon-sprite.svg) no-repeat -203px -802px,
-	depend-up: url(../img/icon-sprite.svg) no-repeat -208px -729px,
-	depend-down: url(../img/icon-sprite.svg) no-repeat -208px -765px,
-	ackn: url(../img/icon-sprite.svg) no-repeat -203px -693px
+	maint: url($sprite-path) no-repeat -203px -802px,
+	depend-up: url($sprite-path) no-repeat -208px -729px,
+	depend-down: url($sprite-path) no-repeat -208px -765px,
+	ackn: url($sprite-path) no-repeat -203px -693px
 );
 
 @each $var-icons, $bgimage in $var-icons {
@@ -203,9 +203,9 @@ $var-icons: (
 }
 
 $form-icon-btn: (
-	help: url(../img/icon-sprite.svg) no-repeat -165px -726px,
-	cal: url(../img/icon-sprite.svg) no-repeat -201px -834px,
-	wzrd-action: url(../img/icon-sprite.svg) no-repeat -168px -617px
+	help: url($sprite-path) no-repeat -165px -726px,
+	cal: url($sprite-path) no-repeat -201px -834px,
+	wzrd-action: url($sprite-path) no-repeat -168px -617px
 );
 
 @each $form-icon-btn, $bgimage in $form-icon-btn {
@@ -220,18 +220,18 @@ $form-icon-btn: (
 }
 
 $icon-widget-btn: (
-	iterator-page-previous: url(../img/icon-sprite.svg) no-repeat -244px -657px,
-	iterator-page-next: url(../img/icon-sprite.svg) no-repeat -242px -623px,
-	widget-action: url(../img/icon-sprite.svg) no-repeat -165px -618px,
-	widget-collapse: url(../img/icon-sprite.svg) no-repeat -165px -654px,
-	widget-expand: url(../img/icon-sprite.svg) no-repeat -165px -690px,
-	widget-edit: url(../img/icon-sprite.svg) no-repeat -201px -619px,
-	widget-delete: url(../img/icon-sprite.svg) no-repeat -201px -582px,
-	alarm-on: url(../img/icon-sprite.svg) no-repeat -165px -546px,
-	alarm-off: url(../img/icon-sprite.svg) no-repeat -165px -582px,
-	sound-on: url(../img/icon-sprite.svg) no-repeat -165px -474px,
-	sound-off: url(../img/icon-sprite.svg) no-repeat -165px -510px,
-	info-clock: url(../img/icon-sprite.svg) no-repeat -246px -762px
+	iterator-page-previous: url($sprite-path) no-repeat -244px -657px,
+	iterator-page-next: url($sprite-path) no-repeat -242px -623px,
+	widget-action: url($sprite-path) no-repeat -165px -618px,
+	widget-collapse: url($sprite-path) no-repeat -165px -654px,
+	widget-expand: url($sprite-path) no-repeat -165px -690px,
+	widget-edit: url($sprite-path) no-repeat -201px -619px,
+	widget-delete: url($sprite-path) no-repeat -201px -582px,
+	alarm-on: url($sprite-path) no-repeat -165px -546px,
+	alarm-off: url($sprite-path) no-repeat -165px -582px,
+	sound-on: url($sprite-path) no-repeat -165px -474px,
+	sound-off: url($sprite-path) no-repeat -165px -510px,
+	info-clock: url($sprite-path) no-repeat -246px -762px
 );
 
 @each $icon-widget-btn, $bgimage in $icon-widget-btn {
@@ -242,29 +242,29 @@ $icon-widget-btn: (
 }
 
 .top-nav-help {
-	background: url(../img/icon-sprite.svg) no-repeat -162px -32px !important;
+	background: url($sprite-path) no-repeat -162px -32px !important;
 }
 .top-nav-profile {
-	background: url(../img/icon-sprite.svg) no-repeat -162px -104px !important;
+	background: url($sprite-path) no-repeat -162px -104px !important;
 }
 .top-nav-guest {
-	background: url(../img/icon-sprite.svg) no-repeat -241px -176px !important;
+	background: url($sprite-path) no-repeat -241px -176px !important;
 }
 
 .top-nav-signout {
-	background: url(../img/icon-sprite.svg) no-repeat -162px -140px !important;
+	background: url($sprite-path) no-repeat -162px -140px !important;
 }
 .top-nav-zbbshare {
-	background: url(../img/icon-sprite.svg) no-repeat -165px -68px !important;
+	background: url($sprite-path) no-repeat -165px -68px !important;
 }
 .top-nav-support {
-	background: url(../img/icon-sprite.svg) no-repeat -245px -68px !important;
+	background: url($sprite-path) no-repeat -245px -68px !important;
 }
 .btn-search{
-	background: url(../img/icon-sprite.svg) no-repeat -162px -7px !important;
+	background: url($sprite-path) no-repeat -162px -7px !important;
 }
 .btn-dashbrd-conf {
-	background: url(../img/icon-sprite.svg) no-repeat -201px -619px !important;
+	background: url($sprite-path) no-repeat -201px -619px !important;
 }
 
 .list-table {
@@ -325,7 +325,7 @@ $icon-widget-btn: (
 			&.selected {
 
 				&::before {
-					background: url(../img/icon-sprite.svg) no-repeat -317px -835px;
+					background: url($sprite-path) no-repeat -317px -835px;
 				}
 			}
 		}
@@ -333,7 +333,7 @@ $icon-widget-btn: (
 		&.selected {
 
 			&::before {
-				background: url(../img/icon-sprite.svg) no-repeat -164px -835px;
+				background: url($sprite-path) no-repeat -164px -835px;
 			}
 		}
 	}
@@ -351,16 +351,16 @@ ul.top-nav-icons {
 }
 
 .add-child-btn {
-	background: url(../img/icon-sprite.svg) no-repeat -206px -551px !important;
+	background: url($sprite-path) no-repeat -206px -551px !important;
 }
 .edit-item-btn {
-	background: url(../img/icon-sprite.svg) no-repeat -206px -478px !important;
+	background: url($sprite-path) no-repeat -206px -478px !important;
 }
 .import-items-btn {
-	background: url(../img/icon-sprite.svg) no-repeat -206px -515px !important;
+	background: url($sprite-path) no-repeat -206px -515px !important;
 }
 .drag-icon {
-	background: url(../img/icon-sprite.svg) no-repeat -165px -762px !important;
+	background: url($sprite-path) no-repeat -165px -762px !important;
 }
 
 // COLORS AND GENERAL
@@ -700,7 +700,7 @@ ul.top-nav-icons {
 			}
 
 			.icon-wzrd-action {
-				background: transparent url(../img/icon-sprite.svg) no-repeat -165px -624px;
+				background: transparent url($sprite-path) no-repeat -165px -624px;
 			}
 		}
 	}
@@ -739,7 +739,7 @@ ul.top-nav-icons {
 	}
 
 	&:after {
-		background: url(../img/icon-sprite.svg) no-repeat;
+		background: url($sprite-path) no-repeat;
 		content: "";
 		position: absolute;
 		left: 6px;
@@ -880,7 +880,7 @@ td.inactive-bg {
 
 .inactive-bg:after {
 	content: "";
-	background: url(../img/icon-sprite.svg) no-repeat -256px -411px;
+	background: url($sprite-path) no-repeat -256px -411px;
 	width: 22px;
 	height: 18px;
 	top: 5px;

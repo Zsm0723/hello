@@ -70,17 +70,8 @@ $timeselector_options = [
 ];
 updateTimeSelectorPeriod($timeselector_options);
 
-if (!hasRequest('filter_set')) {
-	for ($severity = TRIGGER_SEVERITY_NOT_CLASSIFIED; $severity < TRIGGER_SEVERITY_COUNT; $severity++) {
-		$defaultSeverities[$severity] = $severity;
-	}
-}
-else {
-	$defaultSeverities = [];
-}
-
 $data['filter'] = [
-	'severities' => CProfile::getArray('web.toptriggers.filter.severities', $defaultSeverities),
+	'severities' => CProfile::getArray('web.toptriggers.filter.severities', []),
 	'timeline' => getTimeSelectorPeriod($timeselector_options),
 	'active_tab' => CProfile::get('web.toptriggers.filter.active', 1)
 ];
@@ -121,8 +112,11 @@ $sql = 'SELECT e.objectid,count(distinct e.eventid) AS cnt_event'.
 			' AND e.source='.EVENT_SOURCE_TRIGGERS.
 			' AND e.object='.EVENT_OBJECT_TRIGGER.
 			' AND e.clock>='.zbx_dbstr($data['filter']['timeline']['from_ts']).
-			' AND e.clock<='.zbx_dbstr($data['filter']['timeline']['to_ts']).
-			' AND '.dbConditionInt('t.priority', $data['filter']['severities']);
+			' AND e.clock<='.zbx_dbstr($data['filter']['timeline']['to_ts']);
+
+if ($data['filter']['severities']) {
+	$sql .= ' AND '.dbConditionInt('t.priority', $data['filter']['severities']);
+}
 
 if ($hostids) {
 	$inHosts = ' AND '.dbConditionInt('i.hostid', $hostids);

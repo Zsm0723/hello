@@ -180,7 +180,7 @@ class testFormTemplateTags extends CWebTest {
 		$form = $this->query('name:templatesForm')->waitUntilPresent()->asForm()->one();
 		$form->fill($data['fields']);
 		$form->selectTab('Tags');
-		$this->fillTags($data['tags']);
+		$this->fillParameters($data['tags']);
 		$form->submit();
 		$this->page->waitUntilReady();
 
@@ -289,7 +289,7 @@ class testFormTemplateTags extends CWebTest {
 		$form = $this->query('name:templatesForm')->waitUntilPresent()->asForm()->one();
 
 		$form->selectTab('Tags');
-		$this->fillTags($data['tags']);
+		$this->fillParameters($data['tags']);
 		$form->submit();
 		$this->page->waitUntilReady();
 
@@ -336,7 +336,7 @@ class testFormTemplateTags extends CWebTest {
 		$form->getField('Template name')->fill($new_name);
 
 		$form->selectTab('Tags');
-		$tags = $this->getTags();
+		$tags = $this->getValues();
 
 		$this->query('button:'.$action)->one()->click();
 
@@ -357,7 +357,7 @@ class testFormTemplateTags extends CWebTest {
 		$this->assertEquals($new_name, $name);
 
 		$form->selectTab('Tags');
-		$this->assertTags($tags);
+		$this->assertValues($tags);
 	}
 
 	private function checkTagFields($data) {
@@ -365,6 +365,6 @@ class testFormTemplateTags extends CWebTest {
 		$this->page->open('templates.php?form=update&templateid='.$id.'&groupid=4');
 		$form = $this->query('name:templatesForm')->waitUntilPresent()->asForm()->one();
 		$form->selectTab('Tags');
-		$this->assertTags($data['tags']);
+		$this->assertValues($data['tags']);
 	}
 }

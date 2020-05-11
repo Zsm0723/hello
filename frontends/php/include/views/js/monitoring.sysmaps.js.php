@@ -246,7 +246,7 @@ function getFontComboBox($name) {
 						_('Y'),
 						(new CDiv())->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
 						(new CTextBox('y'))->setWidth(ZBX_TEXTAREA_NUMERIC_STANDARD_WIDTH)
-					], 'areaSizeRow')
+					])
 					->addRow(_('URLs'),
 						(new CDiv([
 							(new CTable())
@@ -374,14 +374,18 @@ function getFontComboBox($name) {
 								->setAttribute('data-value', _('X'))
 								->setAttribute('data-value-2', _('X1')),
 							(new CDiv())->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
-							(new CTextBox('x'))->setWidth(ZBX_TEXTAREA_NUMERIC_STANDARD_WIDTH),
+							(new CTextBox('x'))
+								->setWidth(ZBX_TEXTAREA_NUMERIC_STANDARD_WIDTH)
+								->setId('shapeX'),
 							(new CDiv())->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
 							(new CSpan())
 								->addClass('switchable-content')
 								->setAttribute('data-value', _('Y'))
 								->setAttribute('data-value-2', _('Y1')),
 							(new CDiv())->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
-							(new CTextBox('y'))->setWidth(ZBX_TEXTAREA_NUMERIC_STANDARD_WIDTH)
+							(new CTextBox('y'))
+								->setWidth(ZBX_TEXTAREA_NUMERIC_STANDARD_WIDTH)
+								->setId('shapeY')
 						]))->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
 					)
 					->addRow((new CSpan())
@@ -396,7 +400,7 @@ function getFontComboBox($name) {
 							(new CDiv())->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
 							(new CTextBox('width'))
 								->setWidth(ZBX_TEXTAREA_TINY_WIDTH)
-								->setId('areaSizeWidth'),
+								->setId('shapeAreaSizeWidth'),
 							(new CDiv())->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
 							(new CSpan())
 								->addClass('switchable-content')
@@ -405,7 +409,7 @@ function getFontComboBox($name) {
 							(new CDiv())->addClass(ZBX_STYLE_FORM_INPUT_MARGIN),
 							(new CTextBox('height'))
 								->setWidth(ZBX_TEXTAREA_TINY_WIDTH)
-								->setId('areaSizeHeight')
+								->setId('shapeAreaSizeHeight')
 						]))->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
 					)
 					->addItem([

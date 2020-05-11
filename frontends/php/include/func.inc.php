@@ -1429,12 +1429,7 @@ function zbx_toCSV($values) {
 			$row = [$row];
 		}
 		foreach ($row as $num => $value) {
-			if (is_null($value)) {
-				unset($row[$num]);
-			}
-			else {
-				$row[$num] = str_replace('"', '""', $value);
-			}
+			$row[$num] = str_replace('"', '""', $value);
 		}
 		$csv .= '"'.implode($glue, $row).'"'."\n";
 	}
