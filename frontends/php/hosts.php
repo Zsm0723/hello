@@ -903,7 +903,9 @@ if (hasRequest('hosts') && (getRequest('action') === 'host.massupdateform' || ha
 		'mass_replace_tpls' => getRequest('mass_replace_tpls'),
 		'mass_clear_tpls' => getRequest('mass_clear_tpls'),
 		'groups' => getRequest('groups', []),
+		'mass_update_groups' => getRequest('mass_update_groups', ZBX_ACTION_ADD),
 		'tags' => $tags,
+		'mass_update_tags' => getRequest('mass_update_tags', ZBX_ACTION_ADD),
 		'status' => getRequest('status', HOST_STATUS_MONITORED),
 		'description' => getRequest('description'),
 		'proxy_hostid' => getRequest('proxy_hostid', ''),
@@ -920,9 +922,7 @@ if (hasRequest('hosts') && (getRequest('action') === 'host.massupdateform' || ha
 		'tls_issuer' => getRequest('tls_issuer', ''),
 		'tls_subject' => getRequest('tls_subject', ''),
 		'tls_psk_identity' => getRequest('tls_psk_identity', ''),
-		'tls_psk' => getRequest('tls_psk', ''),
-		'mass_update_groups' => getRequest('mass_update_groups', ZBX_ACTION_ADD),
-		'mass_update_tags' => getRequest('mass_update_tags', ZBX_ACTION_ADD)
+		'tls_psk' => getRequest('tls_psk', '')
 	];
 
 	// sort templates
