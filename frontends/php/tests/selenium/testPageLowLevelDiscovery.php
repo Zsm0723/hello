@@ -18,146 +18,91 @@
 ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 **/
 
-require_once dirname(__FILE__).'/../include/CLegacyWebTest.php';
+require_once dirname(__FILE__).'/../include/CWebTest.php';
 
-class testPageLowLevelDiscovery extends CLegacyWebTest {
+class testPageLowLevelDiscovery extends CWebTest {
 
-	// Returns all Discovery Rules
-	public static function data() {
-		return CDBHelper::getDataProvider(
-			'SELECT h.hostid, i.itemid, i.name, h.host, h.status'.
-			' FROM hosts h, items i'.
-			' WHERE i.hostid=h.hostid'.
-				' AND h.host LIKE \'%-layout-test%\''.
-				' AND i.flags = '.ZBX_FLAG_DISCOVERY_RULE
-		);
-	}
+        const HOST_ID = 90001;
+        private $buttons_name = ['Disable', 'Enable', 'Check now', 'Delete'];
 
-	/**
-	* @dataProvider data
-	*/
-	public function testPageLowLevelDiscovery_CheckLayout($data) {
-		$this->zbxTestLogin('host_discovery.php?&hostid='.$data['hostid']);
-		$this->zbxTestCheckTitle('Configuration of discovery rules');
-		$this->zbxTestCheckHeader('Discovery rules');
-		$this->zbxTestTextPresent('Displaying');
+        public function testPageLowLevelDiscovery_CheckPageLayout() {
+                $this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
 
-		if ($data['status'] == HOST_STATUS_MONITORED || $data['status'] == HOST_STATUS_NOT_MONITORED) {
-			$this->zbxTestTextPresent('All hosts');
-			$this->zbxTestTextPresent(
-				[
-					'Name',
-					'Items',
-					'Triggers',
-					'Graphs',
-					'Key',
-					'Interval',
-					'Type',
-					'Status',
-					'Info'
-				]
-			);
-		}
-		if ($data['status'] == HOST_STATUS_TEMPLATE) {
-			$this->zbxTestTextPresent('All templates');
-			$this->zbxTestTextPresent(
-				[
-					'Name',
-					'Items',
-					'Triggers',
-					'Graphs',
-					'Key',
-					'Interval',
-					'Type',
-					'Status'
-				]
-			);
-			$this->zbxTestTextNotPresent('Info');
-		}
+                // Checking Title name.
+		$this->assertPageTitle('Configuration of discovery rules');
 
-		$this->zbxTestAssertElementText("//button[@value='discoveryrule.masscheck_now'][@disabled]", 'Check now');
+                // Checking Header name, that we are in a right place (sure we are, because we wrote already link to this host).
+                $page_title_name = $this->query('xpath://h1[@id="page-title-general"]')->one()->getText();
+                $this->assertEquals('Discovery rules', $page_title_name);
 
-		// TODO someday should check that interval is not shown for trapper items, trends not shown for non-numeric items etc
-		$this->zbxTestTextPresent('Enable', 'Disable', 'Delete');
-		$this->zbxTestTextPresent('0 selected');
-	}
+                // Now, check that there is realy 3 rows displayed.
+                $displayed_discovery = $this->query('xpath://div[@class="table-stats"]')->one()->getText();
+                $this->assertEquals('Displaying 3 of 3 found', $displayed_discovery);
 
-	/**
-	 * @dataProvider data
-	 */
-	public function testPageLowLevelDiscovery_CheckNowAll($data) {
-		$this->zbxTestLogin('host_discovery.php?&hostid='.$data['hostid']);
-		$this->zbxTestCheckHeader('Discovery rules');
+                // Here we go, with horrible, creepy, long, disgusting column value name check... Still thinking about it.
+                $table_headers = ['Items', 'Triggers', 'Graphs', 'Hosts', 'Info', 'Name', 'Key', 'Interval', 'Type', 'Status'];
+                foreach ($table_headers as $header) {
+                $this->assertTrue($this->query('xpath://tr//*[contains(text(),"'.$header.'")]')->one()->isPresent());
+            }
+                // And now let's check that all buttons exists.
+                foreach ($this->buttons_name as $button) {
+                $this->assertTrue($this->query('xpath://button[text()="'.$button.'"]')->one()->isPresent());
+            }
+        }
 
-		$this->zbxTestClick('all_items');
-		$this->zbxTestClickButtonText('Check now');
-		if ($data['status'] == HOST_STATUS_TEMPLATE) {
-			$this->zbxTestWaitUntilMessageTextPresent('msg-bad', 'Cannot send request');
-			$this->zbxTestTextPresentInMessageDetails('Cannot send request: host is not monitored.');
-		}
-		else {
-			$this->zbxTestWaitUntilMessageTextPresent('msg-good', 'Request sent successfully');
-		}
-	}
+	public function testPageLowLevelDiscovery_CheckEnableSingle() {
+		$this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
 
-	/**
-	 * @dataProvider data
-	 * @backup-once triggers
-	 */
-	public function testPageLowLevelDiscovery_SimpleDelete($data) {
-		$itemid = $data['itemid'];
+                // Get table element.
+                $table = $this->query('class:list-table')->asTable()->one();
 
-		$this->zbxTestLogin('host_discovery.php?&hostid='.$data['hostid']);
-		$this->zbxTestCheckTitle('Configuration of discovery rules');
-		$this->zbxTestCheckboxSelect('g_hostdruleid_'.$itemid);
-		$this->zbxTestClickButton('discoveryrule.massdelete');
+                // Find row by column value.
+                $row = $table->findRow('Name', 'Discovery rule 2')->select();
 
-		$this->zbxTestAcceptAlert();
+                // In this wonderful method, we press enabled/Disabled link and checking messages.
+                $actions = ['Enabled', 'Disabled'];
+                foreach ($actions as $action) {
+                    $row->query('link:'.$action)->one()->click();
+                    if ($action=='Enabled') {
+                        $this->assertEquals('Discovery rule disabled', CMessageElement::find()->one()->getTitle());
+                    }
+                    elseif ($action=='Disabled'){
+                        $this->assertEquals('Discovery rule enabled', CMessageElement::find()->one()->getTitle());
+                    }
+                }
+            }
 
-		$this->zbxTestCheckTitle('Configuration of discovery rules');
-		$this->zbxTestTextPresent('Discovery rules deleted');
-		$this->zbxTestCheckHeader('Discovery rules');
+        public function testPageLowLevelDiscovery_CheckButtonsAll() {
+                $this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
 
-		$sql = "SELECT null FROM items WHERE itemid=$itemid";
-		$this->assertEquals(0, CDBHelper::getCount($sql));
-	}
+                // Here we press all available buttons and checking success message (if we have it).
+                foreach ($this->buttons_name as $button) {
+                    $this->query('id:all_items')->asCheckbox()->one()->check();
+                    $this->query('button:'.$button)->one()->click();
+                    if ($button=='Disable') {
+                        $this->page->acceptAlert();
+                        $this->assertEquals('Discovery rules disabled', CMessageElement::find()->one()->getTitle());
+                    }
+                    elseif ($button=='Enable') {
+                        $this->page->acceptAlert();
+                        $this->assertEquals('Discovery rules enabled', CMessageElement::find()->one()->getTitle());
+                    }
+                    elseif ($button=='Check now') {
+                        $this->assertEquals('Request sent successfully', CMessageElement::find()->one()->getTitle());
+                    }
+                    elseif ($button=='Delete') {
+                        $this->assertEquals('Delete selected discovery rules?', $this->page->getAlertText());
+                        $this->page->dismissAlert();
+                    }
+                }
+            }
 
-	// Returns all discovery rules
-	public static function rule() {
-		return CDBHelper::getDataProvider(
-			'SELECT distinct h.hostid, h.host from hosts h, items i'.
-			' WHERE h.host LIKE \'%-layout-test%\'' .
-				' AND h.hostid = i.hostid'.
-				' AND i.flags = '.ZBX_FLAG_DISCOVERY_RULE
-		);
-	}
-
-
-	/**
-	 * @dataProvider rule
-	 * @backup-once triggers
-	 */
-	public function testPageLowLevelDiscovery_MassDelete($rule) {
-		$hostids = CDBHelper::getAll(
-			'SELECT hostid'.
-			' FROM items'.
-			' WHERE hostid='.$rule['hostid'].
-				' AND flags = '.ZBX_FLAG_DISCOVERY_RULE
-		);
-		$hostids = zbx_objectValues($hostids, 'hostids');
-
-		$this->zbxTestLogin('host_discovery.php?&hostid='.$rule['hostid']);
-		$this->zbxTestCheckTitle('Configuration of discovery rules');
-		$this->zbxTestCheckboxSelect('all_items');
-		$this->zbxTestClickButton('discoveryrule.massdelete');
-
-		$this->zbxTestAcceptAlert();
-
-		$this->zbxTestCheckTitle('Configuration of discovery rules');
-		$this->zbxTestTextPresent('Discovery rules deleted');
-		$this->zbxTestCheckHeader('Discovery rules');
-
-		$sql = 'SELECT null FROM items WHERE '.dbConditionInt('hostids', $hostids);
-		$this->assertEquals(0, CDBHelper::getCount($sql));
-	}
-}
+        public function testPageLowLevelDiscovery_CheckButtonsSingle() {
+                // Simply press "Check now" button. No rocket science
+                $this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
+                $table = $this->query('class:list-table')->asTable()->one();
+                $row = $table->findRow('Name', 'Discovery rule 3')->select();
+                $this->query('button:Check now')->one()->click();
+                $this->assertEquals('Request sent successfully', CMessageElement::find()->one()->getTitle());
+                }
+            }
