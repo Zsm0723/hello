@@ -46,6 +46,44 @@
 #   modification, are permitted in any medium without royalty provided
 #   the copyright notice and this notice are preserved.
 
+AC_DEFUN([LIBMYSQL_OPTIONS_TRY],
+[
+	AC_MSG_CHECKING([for MySQL init options function])
+	AC_TRY_LINK(
+[
+#include <mysql.h>
+],
+[
+	MYSQL		*mysql;
+
+	mysql_options(mysql, MYSQL_INIT_COMMAND, "set @@session.auto_increment_offset=1");
+],
+	AC_DEFINE_UNQUOTED([MYSQL_OPTIONS], [mysql_options], [Define mysql options])
+	AC_DEFINE_UNQUOTED([MYSQL_OPTIONS_ARGS_VOID_CAST], [], [Define void cast for mysql options args])
+	found_mysql_options="yes"
+	AC_MSG_RESULT(yes),
+	AC_MSG_RESULT(no))
+])
+
+AC_DEFUN([LIBMARIADB_OPTIONS_TRY],
+[
+	AC_MSG_CHECKING([for MariaDB init options function])
+	AC_TRY_LINK(
+[
+#include <mysql.h>
+],
+[
+	MYSQL	*mysql;
+
+	mysql_optionsv(mysql, MYSQL_INIT_COMMAND, (void *)"set @@session.auto_increment_offset=1");
+],
+	AC_DEFINE_UNQUOTED([MYSQL_OPTIONS], [mysql_optionsv], [Define mysql options])
+	AC_DEFINE_UNQUOTED([MYSQL_OPTIONS_ARGS_VOID_CAST], [(void *)], [Define void cast for mysql options args])
+	found_mariadb_options="yes"
+	AC_MSG_RESULT(yes),
+	AC_MSG_RESULT(no))
+])
+
 AC_DEFUN([AX_LIB_MYSQL],
 [
     MYSQL_CONFIG="no"
@@ -84,8 +122,9 @@ AC_DEFUN([AX_LIB_MYSQL],
             MYSQL_CFLAGS="`$MYSQL_CONFIG --cflags`"
             _full_libmysql_libs="`$MYSQL_CONFIG --libs`"
 
-             _save_mysql_ldflags="${LDFLAGS}"
+            _save_mysql_ldflags="${LDFLAGS}"
             _save_mysql_cflags="${CFLAGS}"
+            _save_mysql_libs="${LIBS}"
             LDFLAGS="${LDFLAGS} ${_full_libmysql_libs}"
             CFLAGS="${CFLAGS} ${MYSQL_CFLAGS}"
 
@@ -95,10 +134,10 @@ AC_DEFUN([AX_LIB_MYSQL],
 
                         _lib_name="`echo "$i" | cut -b3-`"
                         AC_CHECK_LIB($_lib_name, main, [
-                        	MYSQL_LIBS="-l${_lib_name} ${MYSQL_LIBS}"
-                        	],[
-                        	AC_MSG_ERROR([Not found $_lib_name library])
-                        	])
+                            MYSQL_LIBS="-l${_lib_name} ${MYSQL_LIBS}"
+                            ],[
+                            AC_MSG_ERROR([Not found $_lib_name library])
+                            ])
                 ;;
                     -L*)
 
@@ -112,21 +151,40 @@ AC_DEFUN([AX_LIB_MYSQL],
 
                         _lib_name="`echo "$i" | cut -b3-`"
                         AC_CHECK_LIB($_lib_name, main, [
-                        	MYSQL_LIBS="${MYSQL_LIBS} ${i}"
-                        	],[
-                        	AC_MSG_ERROR([Not found $i library])
-                        	])
+                            MYSQL_LIBS="${MYSQL_LIBS} ${i}"
+                            ],[
+                            AC_MSG_ERROR([Not found $i library])
+                            ])
                 ;;
                 esac
             done
-    
+
             LDFLAGS="${_save_mysql_ldflags}"
             CFLAGS="${_save_mysql_cflags}"
+
+            CFLAGS="${CFLAGS} ${MYSQL_CFLAGS}"
+            LDFLAGS="${LDFLAGS} ${MYSQL_LDFLAGS}"
+            LIBS="${LIBS} ${MYSQL_LIBS}"
+
+            LIBMARIADB_OPTIONS_TRY([no])
+            if test "$found_mariadb_options" != "yes"; then
+                LIBMYSQL_OPTIONS_TRY([no])
+                if test "$found_mysql_options" != "yes"; then
+                    AC_MSG_RESULT([no])
+                    AC_MSG_ERROR([Could not find the options function for mysql init])
+                fi
+            fi
+
+            LDFLAGS="${_save_mysql_ldflags}"
+            CFLAGS="${_save_mysql_cflags}"
+            LIBS="${_save_mysql_libs}"
+
             unset _save_mysql_ldflags
             unset _save_mysql_cflags
-    
+            unset _save_mysql_libs
+
             MYSQL_VERSION=`$MYSQL_CONFIG --version`
-    
+
             AC_DEFINE([HAVE_MYSQL], [1],
                 [Define to 1 if MySQL libraries are available])
 
