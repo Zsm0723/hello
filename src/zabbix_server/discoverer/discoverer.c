@@ -274,7 +274,7 @@ static int	discover_service(const DB_DCHECK *dcheck, char *ip, int port, char **
 								NULL, 0);
 					}
 
-					if (SUCCEED == get_value_snmp(&item, &result) &&
+					if (SUCCEED == get_value_snmp(&item, &result, ZBX_NO_POLLER) &&
 							NULL != (pvalue = GET_TEXT_RESULT(&result)))
 					{
 						zbx_strcpy_alloc(value, value_alloc, &value_offset, *pvalue);

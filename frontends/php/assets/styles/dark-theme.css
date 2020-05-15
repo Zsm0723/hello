@@ -1233,6 +1233,11 @@ output {
     margin-bottom: -5px; }
   .table-forms .hor-list li {
     display: inline-block; }
+  .table-forms .dynamic-row > td {
+    padding-top: 0; }
+  .table-forms .dynamic-row-control > td {
+    padding-top: 0;
+    padding-bottom: 0; }
 
 .table-forms-separator {
   display: inline-block;

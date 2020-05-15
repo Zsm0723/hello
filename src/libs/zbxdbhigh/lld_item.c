@@ -1803,7 +1803,12 @@ static zbx_lld_item_t	*lld_item_make(const zbx_lld_item_prototype_t *item_protot
 
 	item->key = zbx_strdup(NULL, item_prototype->key);
 	item->key_orig = NULL;
-	ret = substitute_key_macros(&item->key, NULL, NULL, jp_row, MACRO_TYPE_ITEM_KEY, err, sizeof(err));
+
+	if (FAIL == (ret = substitute_key_macros(&item->key, NULL, NULL, jp_row, MACRO_TYPE_ITEM_KEY, err,
+			sizeof(err))))
+	{
+		*error = zbx_strdcatf(*error, "Cannot create item, error in item key parameters %s.\n", err);
+	}
 
 	item->delay = zbx_strdup(NULL, item_prototype->delay);
 	item->delay_orig = NULL;
@@ -1830,8 +1835,11 @@ static zbx_lld_item_t	*lld_item_make(const zbx_lld_item_prototype_t *item_protot
 
 	if (ITEM_TYPE_CALCULATED == item_prototype->type)
 	{
-		if (SUCCEED == ret)
-			ret = substitute_formula_macros(&item->params, jp_row, err, sizeof(err));
+		if (SUCCEED == ret && FAIL == (ret = substitute_formula_macros(&item->params, jp_row, err,
+				sizeof(err))))
+		{
+			*error = zbx_strdcatf(*error, "Cannot create item, error in formula: %s.\n", err);
+		}
 	}
 	else
 		substitute_lld_macros(&item->params, jp_row, ZBX_MACRO_ANY, NULL, 0);
@@ -1845,11 +1853,15 @@ static zbx_lld_item_t	*lld_item_make(const zbx_lld_item_prototype_t *item_protot
 
 	item->snmp_oid = zbx_strdup(NULL, item_prototype->snmp_oid);
 	item->snmp_oid_orig = NULL;
+
 	if (SUCCEED == ret && (ITEM_TYPE_SNMPv1 == item_prototype->type || ITEM_TYPE_SNMPv2c == item_prototype->type ||
-			ITEM_TYPE_SNMPv3 == item_prototype->type))
+			ITEM_TYPE_SNMPv3 == item_prototype->type) &&
+			FAIL == (ret = substitute_key_macros(&item->snmp_oid, NULL, NULL, jp_row, MACRO_TYPE_SNMP_OID,
+			err, sizeof(err))))
 	{
-		ret = substitute_key_macros(&item->snmp_oid, NULL, NULL, jp_row, MACRO_TYPE_SNMP_OID, err, sizeof(err));
+		*error = zbx_strdcatf(*error, "Cannot create item, error in SNMP OID key parameters: %s.\n", err);
 	}
+
 	zbx_lrtrim(item->snmp_oid, ZBX_WHITESPACE);
 
 	item->username = zbx_strdup(NULL, item_prototype->username);
@@ -1885,8 +1897,11 @@ static zbx_lld_item_t	*lld_item_make(const zbx_lld_item_prototype_t *item_protot
 	item->query_fields = zbx_strdup(NULL, item_prototype->query_fields);
 	item->query_fields_orig = NULL;
 
-	if (SUCCEED == ret)
-		ret = substitute_macros_in_json_pairs(&item->query_fields, jp_row, err, sizeof(err));
+	if (SUCCEED == ret && FAIL == (ret = substitute_macros_in_json_pairs(&item->query_fields, jp_row, err,
+			sizeof(err))))
+	{
+		*error = zbx_strdcatf(*error, "Cannot create item, error in JSON: %s.\n", err);
+	}
 
 	item->posts = zbx_strdup(NULL, item_prototype->posts);
 	item->posts_orig = NULL;
@@ -1901,6 +1916,7 @@ static zbx_lld_item_t	*lld_item_make(const zbx_lld_item_prototype_t *item_protot
 					sizeof(err))))
 			{
 				zbx_lrtrim(err, ZBX_WHITESPACE);
+				*error = zbx_strdcatf(*error, "Cannot create item, error in XML: %s.\n", err);
 			}
 			break;
 		default:
@@ -1947,7 +1963,6 @@ static zbx_lld_item_t	*lld_item_make(const zbx_lld_item_prototype_t *item_protot
 
 	if (SUCCEED != ret)
 	{
-		*error = zbx_strdcatf(*error, "Cannot create item: %s.\n", err);
 		lld_item_free(item);
 		item = NULL;
 	}
@@ -2002,7 +2017,7 @@ static void	lld_item_update(const zbx_lld_item_prototype_t *item_prototype, cons
 			item->flags |= ZBX_FLAG_LLD_ITEM_UPDATE_KEY;
 		}
 		else
-			*error = zbx_strdcatf(*error, "Cannot update item: %s.\n", err);
+			*error = zbx_strdcatf(*error, "Cannot update item, error in item key parameters: %s.\n", err);
 	}
 
 	buffer = zbx_strdup(buffer, item_prototype->delay);
@@ -2066,7 +2081,7 @@ static void	lld_item_update(const zbx_lld_item_prototype_t *item_prototype, cons
 			}
 		}
 		else
-			*error = zbx_strdcatf(*error, "Cannot update item: %s.\n", err);
+			*error = zbx_strdcatf(*error, "Cannot update item, error in formula: %s.\n", err);
 	}
 	else
 	{
@@ -2094,7 +2109,15 @@ static void	lld_item_update(const zbx_lld_item_prototype_t *item_prototype, cons
 	}
 
 	buffer = zbx_strdup(buffer, item_prototype->snmp_oid);
-	substitute_key_macros(&buffer, NULL, NULL, jp_row, MACRO_TYPE_SNMP_OID, NULL, 0);
+
+	if ((ITEM_TYPE_SNMPv1 == item_prototype->type || ITEM_TYPE_SNMPv2c == item_prototype->type ||
+			ITEM_TYPE_SNMPv3 == item_prototype->type) &&
+			FAIL == substitute_key_macros(&buffer, NULL, NULL, jp_row, MACRO_TYPE_SNMP_OID, err,
+			sizeof(err)))
+	{
+		*error = zbx_strdcatf(*error, "Cannot update item, error in SNMP OID key parameters: %s.\n", err);
+	}
+
 	zbx_lrtrim(buffer, ZBX_WHITESPACE);
 	if (0 != strcmp(item->snmp_oid, buffer))
 	{
@@ -2173,7 +2196,7 @@ static void	lld_item_update(const zbx_lld_item_prototype_t *item_prototype, cons
 	buffer = zbx_strdup(buffer, item_prototype->query_fields);
 
 	if (FAIL == substitute_macros_in_json_pairs(&buffer, jp_row, err, sizeof(err)))
-		*error = zbx_strdcatf(*error, "Cannot update item: %s.\n", err);
+		*error = zbx_strdcatf(*error, "Cannot update item, error in JSON: %s.\n", err);
 
 	if (0 != strcmp(item->query_fields, buffer))
 	{
@@ -2194,7 +2217,7 @@ static void	lld_item_update(const zbx_lld_item_prototype_t *item_prototype, cons
 		if (FAIL == substitute_macros_xml(&buffer, NULL, jp_row, err, sizeof(err)))
 		{
 			zbx_lrtrim(err, ZBX_WHITESPACE);
-			*error = zbx_strdcatf(*error, "Cannot update item: %s.\n", err);
+			*error = zbx_strdcatf(*error, "Cannot update item, error in XML: %s.\n", err);
 		}
 	}
 	else
@@ -2394,85 +2417,6 @@ static void	lld_items_make(const zbx_vector_ptr_t *item_prototypes, zbx_vector_p
 
 /******************************************************************************
  *                                                                            *
- * Function: lld_items_preproc_susbstitute_params_macros_regsub               *
- *                                                                            *
- * Purpose: escaping of a symbols in items preprocessing steps for discovery  *
- *          process (regsub version)                                          *
- *                                                                            *
- * Parameters: pp         - [IN] the item preprocessing step                  *
- *             lld_row    - [IN] lld source value                             *
- *             itemid     - [IN] item ID for logging                          *
- *             sub_params - [IN/OUT] the pp params value after substitute     *
- *             error      - [IN/OUT] the lld error message                    *
- *                                                                            *
- * Return value: SUCCEED - if preprocessing steps are valid                   *
- *               FAIL    - if substitute_lld_macros fails                     *
- *                                                                            *
- ******************************************************************************/
-static int	lld_items_preproc_susbstitute_params_macros_regsub(const zbx_lld_item_preproc_t * pp,
-		const zbx_lld_row_t * lld_row, zbx_uint64_t itemid, char **sub_params, char **error)
-{
-	char	*param1 = NULL, *param2 = NULL;
-	size_t	sub_params_size;
-
-	zbx_strsplit(pp->params, '\n', &param1, &param2);
-
-	if (NULL == param2)
-	{
-		zbx_free(param1);
-		*error = zbx_strdcatf(*error, "Cannot %s item: invalid preprocessing step #%d parameters: %s.\n",
-				(0 != itemid ? "update" : "create"), pp->step, pp->params);
-		return FAIL;
-	}
-
-	substitute_lld_macros(&param1, &lld_row->jp_row, ZBX_MACRO_ANY | ZBX_TOKEN_REGEXP, NULL, 0);
-	substitute_lld_macros(&param2, &lld_row->jp_row, ZBX_MACRO_ANY | ZBX_TOKEN_REGEXP_OUTPUT, NULL, 0);
-
-	sub_params_size = strlen(param1) + strlen(param2) + 2;
-	*sub_params = zbx_malloc(NULL, sub_params_size);
-
-	zbx_snprintf(*sub_params, sub_params_size, "%s\n%s", param1, param2);
-
-	zbx_free(param1);
-	zbx_free(param2);
-
-	return SUCCEED;
-}
-
-/******************************************************************************
- *                                                                            *
- * Function: lld_items_preproc_susbstitute_params_macros_generic              *
- *                                                                            *
- * Purpose: escaping of a symbols in items preprocessing steps for discovery  *
- *          process (generic version)                                         *
- *                                                                            *
- * Parameters: pp         - [IN] the item preprocessing step                  *
- *             lld_row    - [IN] lld source value                             *
- *             sub_params - [IN/OUT] the pp params value after substitute     *
- *                                                                            *
- * Return value: SUCCEED - if preprocessing steps are valid                   *
- *               FAIL    - if substitute_lld_macros fails                     *
- *                                                                            *
- ******************************************************************************/
-static int	lld_items_preproc_susbstitute_params_macros_generic(const zbx_lld_item_preproc_t * pp,
-		const zbx_lld_row_t * lld_row, char **sub_params)
-{
-	int	token_type = ZBX_MACRO_ANY;
-
-	if (ZBX_PREPROC_XPATH == pp->type)
-	{
-		token_type |= ZBX_TOKEN_XPATH;
-	}
-
-	*sub_params = zbx_strdup(NULL, pp->params);
-
-	substitute_lld_macros(sub_params, &lld_row->jp_row, token_type, NULL, 0);
-
-	return SUCCEED;
-}
-
-/******************************************************************************
- *                                                                            *
  * Function: lld_items_preproc_susbstitute_params_macros                      *
  *                                                                            *
  * Purpose: escaping of a symbols in items preprocessing steps for discovery  *
@@ -2491,16 +2435,58 @@ static int	lld_items_preproc_susbstitute_params_macros_generic(const zbx_lld_ite
 static int	lld_items_preproc_susbstitute_params_macros(const zbx_lld_item_preproc_t * pp,
 		const zbx_lld_row_t * lld_row, zbx_uint64_t itemid, char **sub_params, char **error)
 {
-	int	ret;
-	if (ZBX_PREPROC_REGSUB == pp->type)
+	int	flags1, flags2, params_num = 1;
+
+	switch(pp->type)
 	{
-		ret = lld_items_preproc_susbstitute_params_macros_regsub(pp, lld_row, itemid, sub_params, error);
+		case ZBX_PREPROC_REGSUB:
+			flags1 = ZBX_MACRO_ANY | ZBX_TOKEN_REGEXP;
+			flags2 = ZBX_MACRO_ANY | ZBX_TOKEN_REGEXP_OUTPUT;
+			params_num = 2;
+			break;
+		case ZBX_PREPROC_XPATH:
+			flags1 = ZBX_MACRO_ANY | ZBX_TOKEN_XPATH;
+			break;
+		case ZBX_PREPROC_JSONPATH:
+			flags1 = ZBX_MACRO_ANY | ZBX_TOKEN_JSONPATH;
+			break;
+		default:
+			flags1 = ZBX_MACRO_ANY;
+	}
+
+	if (2 == params_num)
+	{
+		char	*param1 = NULL, *param2 = NULL;
+		size_t	sub_params_size;
+
+		zbx_strsplit(pp->params, '\n', &param1, &param2);
+
+		if (NULL == param2)
+		{
+			zbx_free(param1);
+			*error = zbx_strdcatf(*error, "Cannot %s item: invalid preprocessing step #%d parameters: %s.\n",
+					(0 != itemid ? "update" : "create"), pp->step, pp->params);
+			return FAIL;
+		}
+
+		substitute_lld_macros(&param1, &lld_row->jp_row, flags1, NULL, 0);
+		substitute_lld_macros(&param2, &lld_row->jp_row, flags2, NULL, 0);
+
+		sub_params_size = strlen(param1) + strlen(param2) + 2;
+		*sub_params = zbx_malloc(NULL, sub_params_size);
+
+		zbx_snprintf(*sub_params, sub_params_size, "%s\n%s", param1, param2);
+
+		zbx_free(param1);
+		zbx_free(param2);
 	}
 	else
 	{
-		ret = lld_items_preproc_susbstitute_params_macros_generic(pp, lld_row, sub_params);
+		*sub_params = zbx_strdup(NULL, pp->params);
+		substitute_lld_macros(sub_params, &lld_row->jp_row, flags1, NULL, 0);
 	}
-	return ret;
+
+	return SUCCEED;
 }
 
 /******************************************************************************

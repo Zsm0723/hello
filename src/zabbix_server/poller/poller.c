@@ -708,7 +708,7 @@ static int	get_values(unsigned char poller_type, int *nextcheck)
 	{
 #ifdef HAVE_NETSNMP
 		/* SNMP checks use their own timeouts */
-		get_values_snmp(items, results, errcodes, num);
+		get_values_snmp(items, results, errcodes, num, poller_type);
 #else
 		for (i = 0; i < num; i++)
 		{

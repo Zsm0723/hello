@@ -490,7 +490,24 @@ int	zbx_db_connect(char *host, char *user, char *password, char *dbname, char *d
 		exit(EXIT_FAILURE);
 	}
 
-	if (NULL == mysql_real_connect(conn, host, user, password, dbname, port, dbsocket, CLIENT_MULTI_STATEMENTS))
+	/* shadow global auto_increment variables */
+
+	if (0 != MYSQL_OPTIONS(conn, MYSQL_INIT_COMMAND, MYSQL_OPTIONS_ARGS_VOID_CAST
+			"set @@session.auto_increment_increment=1"))
+	{
+		zabbix_log(LOG_LEVEL_ERR, "Cannot set auto_increment_increment option.");
+		ret = ZBX_DB_FAIL;
+	}
+
+	if (ZBX_DB_OK == ret && 0 != MYSQL_OPTIONS(conn, MYSQL_INIT_COMMAND, MYSQL_OPTIONS_ARGS_VOID_CAST
+			"set @@session.auto_increment_offset=1"))
+	{
+		zabbix_log(LOG_LEVEL_ERR, "Cannot set auto_increment_offset option.");
+		ret = ZBX_DB_FAIL;
+	}
+
+	if (ZBX_DB_OK == ret && NULL == mysql_real_connect(conn, host, user, password, dbname, port, dbsocket,
+			CLIENT_MULTI_STATEMENTS))
 	{
 		zbx_db_errlog(ERR_Z3001, mysql_errno(conn), mysql_error(conn), dbname);
 		ret = ZBX_DB_FAIL;
