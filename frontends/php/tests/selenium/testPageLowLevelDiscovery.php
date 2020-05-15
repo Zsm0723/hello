@@ -29,7 +29,7 @@ class testPageLowLevelDiscovery extends CWebTest {
         $this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
 
         // Checking Title name.
-		$this->assertPageTitle('Configuration of discovery rules');
+        $this->assertPageTitle('Configuration of discovery rules');
 
         // Checking Header name, that we are in a right place (sure we are, because we wrote already link to this host).
         $page_title_name = $this->query('xpath://h1[@id="page-title-general"]')->one()->getText();
@@ -51,8 +51,8 @@ class testPageLowLevelDiscovery extends CWebTest {
         }
     }
 
-	public function testPageLowLevelDiscovery_CheckEnableSingle() {
-		$this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
+    public function testPageLowLevelDiscovery_CheckEnableSingle() {
+        $this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
 
         // Get table element.
         $table = $this->query('class:list-table')->asTable()->one();
