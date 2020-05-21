@@ -93,6 +93,7 @@ typedef struct
 	zbx_uint64_t			queued_num;	/* queued value counter */
 	zbx_uint64_t			preproc_num;	/* queued values with preprocessing steps */
 	zbx_list_iterator_t		priority_tail;	/* iterator to the last queued priority item */
+	zbx_hashset_t			strpool;	/* string pool */
 }
 zbx_preprocessing_manager_t;
 
@@ -927,6 +928,7 @@ static void	preprocessor_init_manager(zbx_preprocessing_manager_t *manager)
 	zbx_hashset_create(&manager->delta_items, 0, ZBX_DEFAULT_UINT64_HASH_FUNC, ZBX_DEFAULT_UINT64_COMPARE_FUNC);
 	zbx_hashset_create(&manager->history_cache, 1000, ZBX_DEFAULT_UINT64_HASH_FUNC,
 			ZBX_DEFAULT_UINT64_COMPARE_FUNC);
+	zbx_hashset_create(&manager->strpool, 100, zbx_strpool_hash_func, zbx_strpool_compare_func);
 
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);
 }

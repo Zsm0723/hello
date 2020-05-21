@@ -263,6 +263,18 @@ zbx_hash_t	zbx_default_uint64_pair_hash_func(const void *data)
 	return hash;
 }
 
+#define REFCOUNT_FIELD_SIZE	sizeof(zbx_uint32_t)
+
+zbx_hash_t	zbx_strpool_hash_func(const void *data)
+{
+	return ZBX_DEFAULT_STRING_HASH_FUNC((char *)data + REFCOUNT_FIELD_SIZE);
+}
+
+int	zbx_strpool_compare_func(const void *d1, const void *d2)
+{
+	return strcmp((char *)d1 + REFCOUNT_FIELD_SIZE, (char *)d2 + REFCOUNT_FIELD_SIZE);
+}
+
 /* default comparison functions */
 
 int	zbx_default_int_compare_func(const void *d1, const void *d2)
