@@ -721,3 +721,134 @@ zbx_uint64_t	zbx_preprocessor_get_queue_size(void)
 
 	return size;
 }
+
+#define REFCOUNT_FIELD_SIZE	sizeof(zbx_uint32_t)
+
+static char	*strpool_strdup(zbx_hashset_t *strpool, const char *str)
+{
+	void	*ptr;
+
+	if (NULL == str)
+		return NULL;
+
+	ptr = zbx_hashset_search(strpool, str - REFCOUNT_FIELD_SIZE);
+
+	if (NULL == ptr)
+	{
+		ptr = zbx_hashset_insert_ext(strpool, str - REFCOUNT_FIELD_SIZE,
+				REFCOUNT_FIELD_SIZE + strlen(str) + 1, REFCOUNT_FIELD_SIZE);
+
+		*(zbx_uint32_t *)ptr = 0;
+	}
+
+	(*(zbx_uint32_t *)ptr)++;
+
+	return (char *)ptr + REFCOUNT_FIELD_SIZE;
+}
+
+static char	*strpool_strref(char *str)
+{
+	if (NULL != str)
+		(*(zbx_uint32_t *)(str - REFCOUNT_FIELD_SIZE))++;
+
+	return str;
+}
+
+void	strpool_strfree(zbx_hashset_t *strpool, char *str)
+{
+	if (NULL != str)
+	{
+		void	*ptr = str - REFCOUNT_FIELD_SIZE;
+
+		if (0 == --(*(zbx_uint32_t *)ptr))
+			zbx_hashset_remove_direct(strpool, ptr);
+	}
+}
+
+zbx_preproc_item_value_t	*zbx_preprocessor_prepare_value(zbx_preproc_item_value_t *value, zbx_hashset_t *strpool)
+{
+	char	*ptr;
+
+	if (NULL != value->result)
+	{
+		ptr = value->result->text;
+		value->result->text = strpool_strdup(strpool, value->result->text);
+		zbx_free(ptr);
+	}
+
+	return value;
+}
+
+/******************************************************************************
+ *                                                                            *
+ * Function: preprocessor_copy_value                                          *
+ *                                                                            *
+ * Purpose: create a copy of existing item value                              *
+ *                                                                            *
+ * Parameters: target  - [OUT] created copy                                   *
+ *             source  - [IN]  value to be copied                             *
+ *                                                                            *
+ ******************************************************************************/
+void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_preproc_item_value_t *source)
+{
+	memcpy(target, source, sizeof(zbx_preproc_item_value_t));
+
+	if (NULL != source->error)
+		target->error = zbx_strdup(NULL, source->error);
+
+	if (NULL != source->ts)
+	{
+		target->ts = (zbx_timespec_t *)zbx_malloc(NULL, sizeof(zbx_timespec_t));
+		memcpy(target->ts, source->ts, sizeof(zbx_timespec_t));
+	}
+
+	if (NULL != source->result)
+	{
+		target->result = (AGENT_RESULT *)zbx_malloc(NULL, sizeof(AGENT_RESULT));
+		memcpy(target->result, source->result, sizeof(AGENT_RESULT));
+
+		if (NULL != source->result->str)
+			target->result->str = zbx_strdup(NULL, source->result->str);
+
+		if (NULL != source->result->text)
+			target->result->text = strpool_strref(target->result->text);
+
+		if (NULL != source->result->msg)
+			target->result->msg = zbx_strdup(NULL, source->result->msg);
+
+		if (NULL != source->result->log)
+		{
+			target->result->log = (zbx_log_t *)zbx_malloc(NULL, sizeof(zbx_log_t));
+			memcpy(target->result->log, source->result->log, sizeof(zbx_log_t));
+
+			if (NULL != source->result->log->value)
+				target->result->log->value = zbx_strdup(NULL, source->result->log->value);
+
+			if (NULL != source->result->log->source)
+				target->result->log->source = zbx_strdup(NULL, source->result->log->source);
+		}
+	}
+}
+
+/******************************************************************************
+ *                                                                            *
+ * Function: preproc_item_value_clear                                         *
+ *                                                                            *
+ * Purpose: frees resources allocated by preprocessor item value              *
+ *                                                                            *
+ * Parameters: value - [IN] value to be freed                                 *
+ *                                                                            *
+ ******************************************************************************/
+void	preproc_item_value_clear(zbx_hashset_t *strpool, zbx_preproc_item_value_t *value)
+{
+	zbx_free(value->error);
+	if (NULL != value->result)
+	{
+		strpool_strfree(strpool, value->result->text);
+		value->result->text = NULL;
+		free_result(value->result);
+
+		zbx_free(value->result);
+	}
+	zbx_free(value->ts);
+}

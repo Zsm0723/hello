@@ -343,26 +343,6 @@ static void	preprocessor_assign_tasks(zbx_preprocessing_manager_t *manager)
 
 /******************************************************************************
  *                                                                            *
- * Function: preproc_item_value_clear                                         *
- *                                                                            *
- * Purpose: frees resources allocated by preprocessor item value              *
- *                                                                            *
- * Parameters: value - [IN] value to be freed                                 *
- *                                                                            *
- ******************************************************************************/
-static void	preproc_item_value_clear(zbx_preproc_item_value_t *value)
-{
-	zbx_free(value->error);
-	if (NULL != value->result)
-	{
-		free_result(value->result);
-		zbx_free(value->result);
-	}
-	zbx_free(value->ts);
-}
-
-/******************************************************************************
- *                                                                            *
  * Function: preprocessor_free_request                                        *
  *                                                                            *
  * Purpose: free preprocessing request                                        *
@@ -370,9 +350,9 @@ static void	preproc_item_value_clear(zbx_preproc_item_value_t *value)
  * Parameters: request - [IN] request data to be freed                        *
  *                                                                            *
  ******************************************************************************/
-static void	preprocessor_free_request(zbx_preprocessing_request_t *request)
+static void	preprocessor_free_request(zbx_preprocessing_manager_t *manager, zbx_preprocessing_request_t *request)
 {
-	preproc_item_value_clear(&request->value);
+	preproc_item_value_clear(&manager->strpool, &request->value);
 
 	request_free_steps(request);
 	zbx_free(request);
@@ -417,7 +397,7 @@ static void	preprocessing_flush_queue(zbx_preprocessing_manager_t *manager)
 			break;
 
 		preprocessor_flush_value(&request->value);
-		preprocessor_free_request(request);
+		preprocessor_free_request(manager, request);
 
 		if (SUCCEED == zbx_list_iterator_equal(&iterator, &manager->priority_tail))
 			zbx_list_iterator_clear(&manager->priority_tail);
@@ -483,56 +463,6 @@ static void	preprocessor_link_delta_items(zbx_preprocessing_manager_t *manager, 
 	}
 }
 
-/******************************************************************************
- *                                                                            *
- * Function: preprocessor_copy_value                                          *
- *                                                                            *
- * Purpose: create a copy of existing item value                              *
- *                                                                            *
- * Parameters: target  - [OUT] created copy                                   *
- *             source  - [IN]  value to be copied                             *
- *                                                                            *
- ******************************************************************************/
-static void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_preproc_item_value_t *source)
-{
-	memcpy(target, source, sizeof(zbx_preproc_item_value_t));
-
-	if (NULL != source->error)
-		target->error = zbx_strdup(NULL, source->error);
-
-	if (NULL != source->ts)
-	{
-		target->ts = (zbx_timespec_t *)zbx_malloc(NULL, sizeof(zbx_timespec_t));
-		memcpy(target->ts, source->ts, sizeof(zbx_timespec_t));
-	}
-
-	if (NULL != source->result)
-	{
-		target->result = (AGENT_RESULT *)zbx_malloc(NULL, sizeof(AGENT_RESULT));
-		memcpy(target->result, source->result, sizeof(AGENT_RESULT));
-
-		if (NULL != source->result->str)
-			target->result->str = zbx_strdup(NULL, source->result->str);
-
-		if (NULL != source->result->text)
-			target->result->text = zbx_strdup(NULL, source->result->text);
-
-		if (NULL != source->result->msg)
-			target->result->msg = zbx_strdup(NULL, source->result->msg);
-
-		if (NULL != source->result->log)
-		{
-			target->result->log = (zbx_log_t *)zbx_malloc(NULL, sizeof(zbx_log_t));
-			memcpy(target->result->log, source->result->log, sizeof(zbx_log_t));
-
-			if (NULL != source->result->log->value)
-				target->result->log->value = zbx_strdup(NULL, source->result->log->value);
-
-			if (NULL != source->result->log->source)
-				target->result->log->source = zbx_strdup(NULL, source->result->log->source);
-		}
-	}
-}
 
 /******************************************************************************
  *                                                                            *
@@ -576,7 +506,7 @@ static void	preprocessor_enqueue(zbx_preprocessing_manager_t *manager, zbx_prepr
 			preprocessor_flush_value(value);
 			manager->processed_num++;
 			preprocessor_enqueue_dependent(manager, value, NULL);
-			preproc_item_value_clear(value);
+			preproc_item_value_clear(&manager->strpool, value);
 
 			goto out;
 		}
@@ -710,7 +640,7 @@ static void	preprocessor_add_request(zbx_preprocessing_manager_t *manager, zbx_i
 	while (offset < message->size)
 	{
 		offset += zbx_preprocessor_unpack_value(&value, message->data + offset);
-		preprocessor_enqueue(manager, &value, NULL);
+		preprocessor_enqueue(manager, zbx_preprocessor_prepare_value(&value, &manager->strpool), NULL);
 	}
 
 	preprocessor_assign_tasks(manager);
@@ -730,7 +660,8 @@ static void	preprocessor_add_request(zbx_preprocessing_manager_t *manager, zbx_i
  *             error   - [IN] error message (if any)                          *
  *                                                                            *
  ******************************************************************************/
-static int	preprocessor_set_variant_result(zbx_preprocessing_request_t *request, zbx_variant_t *value, char *error)
+static int	preprocessor_set_variant_result(zbx_hashset_t *strpool, zbx_preprocessing_request_t *request,
+		zbx_variant_t *value, char *error)
 {
 	int		type, ret = FAIL;
 	zbx_log_t	*log;
@@ -805,6 +736,9 @@ static int	preprocessor_set_variant_result(zbx_preprocessing_request_t *request,
 				break;
 			case ITEM_VALUE_TYPE_TEXT:
 				UNSET_RESULT_EXCLUDING(request->value.result, AR_TEXT);
+
+				strpool_strfree(strpool, request->value.result->text);
+				request->value.result->text = NULL;
 				UNSET_TEXT_RESULT(request->value.result);
 				SET_TEXT_RESULT(request->value.result, value->data.str);
 				break;
@@ -888,8 +822,8 @@ static void	preprocessor_add_result(zbx_preprocessing_manager_t *manager, zbx_ip
 		zbx_hashset_remove_direct(&manager->delta_items, index);
 	}
 
-	if (FAIL != preprocessor_set_variant_result(request, &value, error))
-		preprocessor_enqueue_dependent(manager, &request->value, worker->queue_item);
+	if (FAIL != preprocessor_set_variant_result(&manager->strpool, request, &value, error))
+		preprocessor_enqueue_dependent(manager, zbx_preprocessor_prepare_value(&request->value, &manager->strpool), worker->queue_item);
 
 	worker->queue_item = NULL;
 	zbx_variant_clear(&value);
@@ -994,7 +928,7 @@ static void	preprocessor_destroy_manager(zbx_preprocessing_manager_t *manager)
 
 	/* this is the place where values are lost */
 	while (SUCCEED == zbx_list_pop(&manager->queue, (void **)&request))
-		preprocessor_free_request(request);
+		preprocessor_free_request(manager, request);
 
 	zbx_list_destroy(&manager->queue);
 
