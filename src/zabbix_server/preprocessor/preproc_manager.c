@@ -104,12 +104,12 @@ static void	preprocessor_enqueue_dependent(zbx_preprocessing_manager_t *manager,
 
 /* strpool functions */
 
-zbx_hash_t	zbx_strpool_hash_func(const void *data)
+static zbx_hash_t	zbx_strpool_hash_func(const void *data)
 {
 	return ZBX_DEFAULT_STRING_HASH_FUNC((char *)data + REFCOUNT_FIELD_SIZE);
 }
 
-int	zbx_strpool_compare_func(const void *d1, const void *d2)
+static int	zbx_strpool_compare_func(const void *d1, const void *d2)
 {
 	return strcmp((char *)d1 + REFCOUNT_FIELD_SIZE, (char *)d2 + REFCOUNT_FIELD_SIZE);
 }
@@ -396,7 +396,7 @@ static void	preprocessor_assign_tasks(zbx_preprocessing_manager_t *manager)
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);
 }
 
-void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
+static void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
 {
 	strpool_strfree(strpool, &result->str);
 	strpool_strfree(strpool, &result->text);
@@ -420,7 +420,7 @@ void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
  * Parameters: value - [IN] value to be freed                                 *
  *                                                                            *
  ******************************************************************************/
-void	preproc_item_value_clear(zbx_hashset_t *strpool, zbx_preproc_item_value_t *value)
+static void	preproc_item_value_clear(zbx_hashset_t *strpool, zbx_preproc_item_value_t *value)
 {
 	zbx_free(value->error);
 	if (NULL != value->result)
@@ -563,7 +563,7 @@ static void	preprocessor_link_delta_items(zbx_preprocessing_manager_t *manager, 
  *             source  - [IN]  value to be copied                             *
  *                                                                            *
  ******************************************************************************/
-void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_preproc_item_value_t *source)
+static void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_preproc_item_value_t *source)
 {
 	memcpy(target, source, sizeof(zbx_preproc_item_value_t));
 
@@ -596,7 +596,7 @@ void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_preproc_item_
 	}
 }
 
-zbx_preproc_item_value_t	*zbx_preprocessor_prepare_value(zbx_preproc_item_value_t *value, zbx_hashset_t *strpool)
+static zbx_preproc_item_value_t	*zbx_preprocessor_prepare_value(zbx_preproc_item_value_t *value, zbx_hashset_t *strpool)
 {
 	if (NULL != value->result)
 	{
@@ -1066,6 +1066,7 @@ static void	preprocessor_destroy_manager(zbx_preprocessing_manager_t *manager)
 	zbx_hashset_destroy(&manager->item_config);
 	zbx_hashset_destroy(&manager->delta_items);
 	zbx_hashset_destroy(&manager->history_cache);
+	zbx_hashset_destroy(&manager->strpool);
 }
 
 ZBX_THREAD_ENTRY(preprocessing_manager_thread, args)
