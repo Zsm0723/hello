@@ -678,12 +678,7 @@ static int	preprocessor_set_variant_result(zbx_hashset_t *strpool, zbx_preproces
 
 	if (ZBX_VARIANT_NONE == value->type)
 	{
-		UNSET_UI64_RESULT(request->value.result);
-		UNSET_DBL_RESULT(request->value.result);
-		UNSET_STR_RESULT(request->value.result);
-		UNSET_TEXT_RESULT(request->value.result);
-		UNSET_LOG_RESULT(request->value.result);
-		UNSET_MSG_RESULT(request->value.result);
+		free_preproc_item_result(strpool, request->value.result);
 		ret = FAIL;
 
 		goto out;
@@ -704,47 +699,33 @@ static int	preprocessor_set_variant_result(zbx_hashset_t *strpool, zbx_preproces
 
 	if (FAIL != (ret = zbx_variant_convert(value, type)))
 	{
+		free_preproc_item_result(strpool, request->value.result);
+
 		switch (request->value_type)
 		{
 			case ITEM_VALUE_TYPE_FLOAT:
-				UNSET_RESULT_EXCLUDING(request->value.result, AR_DOUBLE);
 				SET_DBL_RESULT(request->value.result, value->data.dbl);
 				break;
 			case ITEM_VALUE_TYPE_STR:
-				UNSET_RESULT_EXCLUDING(request->value.result, AR_STRING);
-				UNSET_STR_RESULT(request->value.result);
 				SET_STR_RESULT(request->value.result, value->data.str);
 				break;
 			case ITEM_VALUE_TYPE_LOG:
-				UNSET_RESULT_EXCLUDING(request->value.result, AR_LOG);
-				if (ISSET_LOG(request->value.result))
-				{
-					log = GET_LOG_RESULT(request->value.result);
-					zbx_free(log->value);
-				}
-				else
-				{
-					log = (zbx_log_t *)zbx_malloc(NULL, sizeof(zbx_log_t));
-					memset(log, 0, sizeof(zbx_log_t));
-					SET_LOG_RESULT(request->value.result, log);
-				}
+				log = (zbx_log_t *)zbx_malloc(NULL, sizeof(zbx_log_t));
+				memset(log, 0, sizeof(zbx_log_t));
+				SET_LOG_RESULT(request->value.result, log);
 				log->value = value->data.str;
 				break;
 			case ITEM_VALUE_TYPE_UINT64:
-				UNSET_RESULT_EXCLUDING(request->value.result, AR_UINT64);
 				SET_UI64_RESULT(request->value.result, value->data.ui64);
 				break;
 			case ITEM_VALUE_TYPE_TEXT:
-				UNSET_RESULT_EXCLUDING(request->value.result, AR_TEXT);
-
-				strpool_strfree(strpool, request->value.result->text);
-				request->value.result->text = NULL;
-				UNSET_TEXT_RESULT(request->value.result);
 				SET_TEXT_RESULT(request->value.result, value->data.str);
 				break;
 		}
 
 		zbx_variant_set_none(value);
+
+		zbx_preprocessor_prepare_value(&request->value, strpool);
 	}
 	else
 	{
@@ -823,7 +804,7 @@ static void	preprocessor_add_result(zbx_preprocessing_manager_t *manager, zbx_ip
 	}
 
 	if (FAIL != preprocessor_set_variant_result(&manager->strpool, request, &value, error))
-		preprocessor_enqueue_dependent(manager, zbx_preprocessor_prepare_value(&request->value, &manager->strpool), worker->queue_item);
+		preprocessor_enqueue_dependent(manager, &request->value, worker->queue_item);
 
 	worker->queue_item = NULL;
 	zbx_variant_clear(&value);
