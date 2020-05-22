@@ -104,6 +104,16 @@ static void	preprocessor_enqueue_dependent(zbx_preprocessing_manager_t *manager,
 
 /* strpool functions */
 
+zbx_hash_t	zbx_strpool_hash_func(const void *data)
+{
+	return ZBX_DEFAULT_STRING_HASH_FUNC((char *)data + REFCOUNT_FIELD_SIZE);
+}
+
+int	zbx_strpool_compare_func(const void *d1, const void *d2)
+{
+	return strcmp((char *)d1 + REFCOUNT_FIELD_SIZE, (char *)d2 + REFCOUNT_FIELD_SIZE);
+}
+
 static void	strpool_strdup_replace(zbx_hashset_t *strpool, char **str)
 {
 	void	*ptr;
@@ -386,6 +396,21 @@ static void	preprocessor_assign_tasks(zbx_preprocessing_manager_t *manager)
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);
 }
 
+void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
+{
+	strpool_strfree(strpool, &result->str);
+	strpool_strfree(strpool, &result->text);
+	strpool_strfree(strpool, &result->msg);
+
+	if (NULL != result->log)
+	{
+		strpool_strfree(strpool, &result->log->value);
+		strpool_strfree(strpool, &result->log->source);
+	}
+
+	free_result(result);
+}
+
 /******************************************************************************
  *                                                                            *
  * Function: preproc_item_value_clear                                         *
@@ -404,21 +429,6 @@ void	preproc_item_value_clear(zbx_hashset_t *strpool, zbx_preproc_item_value_t *
 		zbx_free(value->result);
 	}
 	zbx_free(value->ts);
-}
-
-void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
-{
-	strpool_strfree(strpool, &result->str);
-	strpool_strfree(strpool, &result->text);
-	strpool_strfree(strpool, &result->msg);
-
-	if (NULL != result->log)
-	{
-		strpool_strfree(strpool, &result->log->value);
-		strpool_strfree(strpool, &result->log->source);
-	}
-
-	free_result(result);
 }
 
 /******************************************************************************

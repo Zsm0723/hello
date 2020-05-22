@@ -424,8 +424,6 @@ zbx_uint32_t	zbx_preprocessor_unpack_value(zbx_preproc_item_value_t *value, unsi
 	return offset - data;
 }
 
-
-
 /******************************************************************************
  *                                                                            *
  * Function: zbx_preprocessor_unpack_task                                     *
