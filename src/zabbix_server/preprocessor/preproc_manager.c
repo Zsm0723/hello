@@ -100,6 +100,51 @@ zbx_preprocessing_manager_t;
 static void	preprocessor_enqueue_dependent(zbx_preprocessing_manager_t *manager,
 		zbx_preproc_item_value_t *value, zbx_list_item_t *master);
 
+#define REFCOUNT_FIELD_SIZE	sizeof(zbx_uint32_t)
+
+/* strpool functions */
+
+static void	strpool_strdup_replace(zbx_hashset_t *strpool, char **str)
+{
+	void	*ptr;
+
+	if (NULL == *str)
+		return;
+
+	ptr = zbx_hashset_search(strpool, *str - REFCOUNT_FIELD_SIZE);
+
+	if (NULL == ptr)
+	{
+		ptr = zbx_hashset_insert_ext(strpool, *str - REFCOUNT_FIELD_SIZE,
+				REFCOUNT_FIELD_SIZE + strlen(*str) + 1, REFCOUNT_FIELD_SIZE);
+
+		*(zbx_uint32_t *)ptr = 0;
+	}
+
+	(*(zbx_uint32_t *)ptr)++;
+
+	zbx_free(*str);
+	*str = (char *)ptr + REFCOUNT_FIELD_SIZE;
+}
+
+static void	strpool_strref(char *str)
+{
+	if (NULL != str)
+		(*(zbx_uint32_t *)(str - REFCOUNT_FIELD_SIZE))++;
+}
+
+static void	strpool_strfree(zbx_hashset_t *strpool, char **str)
+{
+	if (NULL != *str)
+	{
+		void	*ptr = *str - REFCOUNT_FIELD_SIZE;
+
+		if (0 == --(*(zbx_uint32_t *)ptr))
+			zbx_hashset_remove_direct(strpool, ptr);
+	}
+	*str = NULL;
+}
+
 /* cleanup functions */
 
 static void	preproc_item_clear(zbx_preproc_item_t *item)
@@ -343,6 +388,41 @@ static void	preprocessor_assign_tasks(zbx_preprocessing_manager_t *manager)
 
 /******************************************************************************
  *                                                                            *
+ * Function: preproc_item_value_clear                                         *
+ *                                                                            *
+ * Purpose: frees resources allocated by preprocessor item value              *
+ *                                                                            *
+ * Parameters: value - [IN] value to be freed                                 *
+ *                                                                            *
+ ******************************************************************************/
+void	preproc_item_value_clear(zbx_hashset_t *strpool, zbx_preproc_item_value_t *value)
+{
+	zbx_free(value->error);
+	if (NULL != value->result)
+	{
+		free_preproc_item_result(strpool, value->result);
+		zbx_free(value->result);
+	}
+	zbx_free(value->ts);
+}
+
+void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
+{
+	strpool_strfree(strpool, &result->str);
+	strpool_strfree(strpool, &result->text);
+	strpool_strfree(strpool, &result->msg);
+
+	if (NULL != result->log)
+	{
+		strpool_strfree(strpool, &result->log->value);
+		strpool_strfree(strpool, &result->log->source);
+	}
+
+	free_result(result);
+}
+
+/******************************************************************************
+ *                                                                            *
  * Function: preprocessor_free_request                                        *
  *                                                                            *
  * Purpose: free preprocessing request                                        *
@@ -463,6 +543,66 @@ static void	preprocessor_link_delta_items(zbx_preprocessing_manager_t *manager, 
 	}
 }
 
+/******************************************************************************
+ *                                                                            *
+ * Function: preprocessor_copy_value                                          *
+ *                                                                            *
+ * Purpose: create a copy of existing item value                              *
+ *                                                                            *
+ * Parameters: target  - [OUT] created copy                                   *
+ *             source  - [IN]  value to be copied                             *
+ *                                                                            *
+ ******************************************************************************/
+void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_preproc_item_value_t *source)
+{
+	memcpy(target, source, sizeof(zbx_preproc_item_value_t));
+
+	if (NULL != source->error)
+		target->error = zbx_strdup(NULL, source->error);
+
+	if (NULL != source->ts)
+	{
+		target->ts = (zbx_timespec_t *)zbx_malloc(NULL, sizeof(zbx_timespec_t));
+		memcpy(target->ts, source->ts, sizeof(zbx_timespec_t));
+	}
+
+	if (NULL != source->result)
+	{
+		target->result = (AGENT_RESULT *)zbx_malloc(NULL, sizeof(AGENT_RESULT));
+		memcpy(target->result, source->result, sizeof(AGENT_RESULT));
+
+		strpool_strref(target->result->str);
+		strpool_strref(target->result->text);
+		strpool_strref(target->result->msg);
+
+		if (NULL != source->result->log)
+		{
+			target->result->log = (zbx_log_t *)zbx_malloc(NULL, sizeof(zbx_log_t));
+			memcpy(target->result->log, source->result->log, sizeof(zbx_log_t));
+
+			strpool_strref(target->result->log->value);
+			strpool_strref(source->result->log->source);
+		}
+	}
+}
+
+zbx_preproc_item_value_t	*zbx_preprocessor_prepare_value(zbx_preproc_item_value_t *value, zbx_hashset_t *strpool)
+{
+	if (NULL != value->result)
+	{
+		strpool_strdup_replace(strpool, &value->result->str);
+		strpool_strdup_replace(strpool, &value->result->text);
+		strpool_strdup_replace(strpool, &value->result->msg);
+
+		if (NULL != value->result->log)
+		{
+			strpool_strdup_replace(strpool, &value->result->log->value);
+			strpool_strdup_replace(strpool, &value->result->log->source);
+		}
+	}
+
+	return value;
+}
 
 /******************************************************************************
  *                                                                            *

@@ -51,10 +51,6 @@ zbx_uint32_t	zbx_preprocessor_pack_result(unsigned char **data, zbx_variant_t *v
 		zbx_item_history_value_t *history_value, char *error);
 
 zbx_uint32_t	zbx_preprocessor_unpack_value(zbx_preproc_item_value_t *value, unsigned char *data);
-zbx_preproc_item_value_t	*zbx_preprocessor_prepare_value(zbx_preproc_item_value_t *value, zbx_hashset_t *strpool);
-void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_preproc_item_value_t *source);
-void	preproc_item_value_clear(zbx_hashset_t *strpool, zbx_preproc_item_value_t *value);
-void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result);
 
 void	zbx_preprocessor_unpack_task(zbx_uint64_t *itemid, unsigned char *value_type, zbx_timespec_t **ts,
 		zbx_variant_t *value, zbx_item_history_value_t **history_value, zbx_preproc_op_t **steps,
