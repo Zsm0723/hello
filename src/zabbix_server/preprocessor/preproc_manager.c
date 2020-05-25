@@ -396,7 +396,21 @@ static void	preprocessor_assign_tasks(zbx_preprocessing_manager_t *manager)
 	zabbix_log(LOG_LEVEL_DEBUG, "End of %s()", __function_name);
 }
 
-static void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
+static void	preproc_item_result_prepare(zbx_hashset_t *strpool, AGENT_RESULT *result)
+{
+	if (NULL == result)
+		return;
+
+	strpool_strdup_replace(strpool, &result->text);
+
+	if (NULL == result->log)
+		return;
+
+	strpool_strdup_replace(strpool, &result->log->value);
+
+}
+
+static void	preproc_item_result_clear(zbx_hashset_t *strpool, AGENT_RESULT *result)
 {
 	strpool_strfree(strpool, &result->text);
 
@@ -420,7 +434,7 @@ static void	preproc_item_value_clear(zbx_hashset_t *strpool, zbx_preproc_item_va
 	zbx_free(value->error);
 	if (NULL != value->result)
 	{
-		free_preproc_item_result(strpool, value->result);
+		preproc_item_result_clear(strpool, value->result);
 		zbx_free(value->result);
 	}
 	zbx_free(value->ts);
@@ -595,19 +609,6 @@ static void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_prepro
 				target->result->log->source = zbx_strdup(NULL, source->result->log->source);
 		}
 	}
-}
-
-static zbx_preproc_item_value_t	*zbx_preprocessor_prepare_value(zbx_preproc_item_value_t *value, zbx_hashset_t *strpool)
-{
-	if (NULL != value->result)
-	{
-		strpool_strdup_replace(strpool, &value->result->text);
-
-		if (NULL != value->result->log)
-			strpool_strdup_replace(strpool, &value->result->log->value);
-	}
-
-	return value;
 }
 
 /******************************************************************************
@@ -786,7 +787,8 @@ static void	preprocessor_add_request(zbx_preprocessing_manager_t *manager, zbx_i
 	while (offset < message->size)
 	{
 		offset += zbx_preprocessor_unpack_value(&value, message->data + offset);
-		preprocessor_enqueue(manager, zbx_preprocessor_prepare_value(&value, &manager->strpool), NULL);
+		preproc_item_result_prepare(&manager->strpool, value.result);
+		preprocessor_enqueue(manager, &value, NULL);
 	}
 
 	preprocessor_assign_tasks(manager);
@@ -824,7 +826,7 @@ static int	preprocessor_set_variant_result(zbx_hashset_t *strpool, zbx_preproces
 
 	if (ZBX_VARIANT_NONE == value->type)
 	{
-		free_preproc_item_result(strpool, request->value.result);
+		preproc_item_result_clear(strpool, request->value.result);
 		ret = FAIL;
 
 		goto out;
@@ -845,7 +847,7 @@ static int	preprocessor_set_variant_result(zbx_hashset_t *strpool, zbx_preproces
 
 	if (FAIL != (ret = zbx_variant_convert(value, type)))
 	{
-		free_preproc_item_result(strpool, request->value.result);
+		preproc_item_result_clear(strpool, request->value.result);
 
 		switch (request->value_type)
 		{
@@ -871,7 +873,7 @@ static int	preprocessor_set_variant_result(zbx_hashset_t *strpool, zbx_preproces
 
 		zbx_variant_set_none(value);
 
-		zbx_preprocessor_prepare_value(&request->value, strpool);
+		preproc_item_result_prepare(strpool, request->value.result);
 	}
 	else
 	{
