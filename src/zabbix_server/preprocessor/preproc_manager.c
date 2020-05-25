@@ -398,15 +398,10 @@ static void	preprocessor_assign_tasks(zbx_preprocessing_manager_t *manager)
 
 static void	free_preproc_item_result(zbx_hashset_t *strpool, AGENT_RESULT *result)
 {
-	strpool_strfree(strpool, &result->str);
 	strpool_strfree(strpool, &result->text);
-	strpool_strfree(strpool, &result->msg);
 
 	if (NULL != result->log)
-	{
 		strpool_strfree(strpool, &result->log->value);
-		strpool_strfree(strpool, &result->log->source);
-	}
 
 	free_result(result);
 }
@@ -581,9 +576,13 @@ static void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_prepro
 		target->result = (AGENT_RESULT *)zbx_malloc(NULL, sizeof(AGENT_RESULT));
 		memcpy(target->result, source->result, sizeof(AGENT_RESULT));
 
-		strpool_strref(target->result->str);
+		if (NULL != source->result->str)
+			target->result->str = zbx_strdup(NULL, source->result->str);
+
 		strpool_strref(target->result->text);
-		strpool_strref(target->result->msg);
+
+		if (NULL != source->result->msg)
+			target->result->msg = zbx_strdup(NULL, source->result->msg);
 
 		if (NULL != source->result->log)
 		{
@@ -591,7 +590,9 @@ static void	preprocessor_copy_value(zbx_preproc_item_value_t *target, zbx_prepro
 			memcpy(target->result->log, source->result->log, sizeof(zbx_log_t));
 
 			strpool_strref(target->result->log->value);
-			strpool_strref(source->result->log->source);
+
+			if (NULL != source->result->log->source)
+				target->result->log->source = zbx_strdup(NULL, source->result->log->source);
 		}
 	}
 }
@@ -600,15 +601,10 @@ static zbx_preproc_item_value_t	*zbx_preprocessor_prepare_value(zbx_preproc_item
 {
 	if (NULL != value->result)
 	{
-		strpool_strdup_replace(strpool, &value->result->str);
 		strpool_strdup_replace(strpool, &value->result->text);
-		strpool_strdup_replace(strpool, &value->result->msg);
 
 		if (NULL != value->result->log)
-		{
 			strpool_strdup_replace(strpool, &value->result->log->value);
-			strpool_strdup_replace(strpool, &value->result->log->source);
-		}
 	}
 
 	return value;
