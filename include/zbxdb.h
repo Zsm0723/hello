@@ -79,6 +79,9 @@ int	zbx_db_init(const char *dbname, const char *const db_schema, char **error);
 void	zbx_db_deinit(void);
 
 int	zbx_db_connect(char *host, char *user, char *password, char *dbname, char *dbschema, char *dbsocket, int port);
+
+void	zbx_db_init_autoincrement_options(void);
+
 void	zbx_db_close(void);
 
 int	zbx_db_begin(void);
