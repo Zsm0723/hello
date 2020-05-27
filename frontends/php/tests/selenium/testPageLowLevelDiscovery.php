@@ -27,11 +27,8 @@ require_once dirname(__FILE__).'/../include/CWebTest.php';
 class testPageLowLevelDiscovery extends CWebTest {
 
 	const HOST_ID = 90001;
-	private $buttons_name = ['Disable', 'Enable', 'Check now', 'Delete'];
-	private $discovery_rule_name = 'Discovery rule 2';
 	private $table_headers = ['Items', 'Triggers', 'Graphs', 'Hosts', 'Info', 'Name', 'Key', 'Interval', 'Type', 'Status'];
 	private $all_discovery_rule_names = ['Discovery rule 1', 'Discovery rule 2', 'Discovery rule 3'];
-	private $discovery_status = ['Enabled', 'Disabled'];
 
 	public function testPageLowLevelDiscovery_CheckPageLayout() {
 		$this->page->login()->open('host_discovery.php?&hostid='.self::HOST_ID);
@@ -49,7 +46,8 @@ class testPageLowLevelDiscovery extends CWebTest {
 		$this->assertEquals('Displaying 3 of 3 found', $displayed_discovery);
 
 		// Check buttons.
-		foreach ($this->buttons_name as $button) {
+		$buttons_name = ['Disable', 'Enable', 'Check now', 'Delete'];
+		foreach ($buttons_name as $button) {
 			$this->assertTrue($this->query('button:'.$button)->one()->isPresent());
 		}
 	}
@@ -60,13 +58,16 @@ class testPageLowLevelDiscovery extends CWebTest {
 		$row = $table->findRow('Name', $this->all_discovery_rule_names[1]);
 		$row->select();
 		// Clicking Enabled/Disabled link
-		foreach ($this->discovery_status as $action) {
+		$discovery_status = ['Enabled', 'Disabled'];
+		foreach ($discovery_status as $action) {
 			$row->query('link:'.$action)->one()->click();
 			$expected_status = $action === 'Enabled' ? 1 : 0;
 			$status = CDBHelper::getValue('SELECT status FROM items WHERE name ='.zbx_dbstr($this->all_discovery_rule_names[1]));
 			$this->assertEquals($expected_status, $status);
 			$message_action = $action === 'Enabled' ? 'disabled' : 'enabled';
 			$this->assertEquals('Discovery rule '.$message_action, CMessageElement::find()->one()->getTitle());
+			$link_color = $action === 'Enabled' ? 'red' : 'green';
+			$this->assertTrue($row->query('xpath://td/a[@class="link-action '.$link_color.'"]')->one()->isPresent());
 		}
 	}
 
