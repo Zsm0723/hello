@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zabbix 4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-19 14:13+0300\n"
+"POT-Creation-Date: 2020-05-18 12:32+0300\n"
 "PO-Revision-Date: 2020-02-10 08:05+0300\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Zabbix <info@zabbix.com>\n"
@@ -314,7 +314,7 @@ msgstr ""
 msgid "<sub-menu/sub-menu/...>script"
 msgstr "<sub-menu/sub-menu/...>스크립트"
 
-#: include/classes/widgets/CWidgetHelper.php:746
+#: include/classes/widgets/CWidgetHelper.php:748
 msgid "ADD OVERRIDE"
 msgstr "오버라이드 추가"
 
@@ -568,9 +568,9 @@ msgstr "종료시간"
 #: app/views/monitoring.problem.view.php:257 app/views/popup.httpstep.php:69
 #: app/views/popup.httpstep.php:95 app/views/popup.httpstep.php:119
 #: app/views/popup.httpstep.php:138 app/views/popup.httpstep.php:177
-#: app/views/popup.media.php:48 app/views/popup.media.php:111
+#: app/views/popup.media.php:48 app/views/popup.media.php:112
 #: app/views/popup.triggerwizard.php:104 app/views/popup.triggerwizard.php:138
-#: include/classes/widgets/CWidgetHelper.php:484 include/forms.inc.php:1487
+#: include/classes/widgets/CWidgetHelper.php:486 include/forms.inc.php:1487
 #: include/forms.inc.php:2382
 #: include/views/administration.auditlogs.list.php:46
 #: include/views/administration.general.iconmap.edit.php:101
@@ -720,11 +720,11 @@ msgstr "호스트 추가"
 msgid "Add multiple maps"
 msgstr "복수의 맵을 추가"
 
-#: include/classes/widgets/CWidgetHelper.php:1167
+#: include/classes/widgets/CWidgetHelper.php:1169
 msgid "Add new data set"
 msgstr "새로운 데이터 셋을 추가"
 
-#: include/classes/widgets/CWidgetHelper.php:700
+#: include/classes/widgets/CWidgetHelper.php:702
 msgid "Add new override"
 msgstr "새로운 오버라이드를 추가"
 
@@ -825,7 +825,7 @@ msgstr "에이전트 인터페이스"
 msgid "Agent or SNMP or JMX or IPMI interface"
 msgstr "에이전트, SNMP, JMX, IPMI 인터페이스"
 
-#: include/classes/widgets/CWidgetHelper.php:1107
+#: include/classes/widgets/CWidgetHelper.php:1109
 msgid "Aggregate"
 msgstr ""
 
@@ -833,11 +833,11 @@ msgstr ""
 msgid "Aggregate checks do not require any agent running on a host being monitored. Zabbix server collects aggregate information by doing direct database queries. See Zabbix Manual."
 msgstr "어그리게이트 체크는 감시대상의 호스트상에서 에이전트가 기동될 필요는 없습니다. Zabbix서버는 데이터베이스에서 직접 정보를 수집합니다. 자세한 것은 메뉴얼을 참고하십시오."
 
-#: include/classes/widgets/CWidgetHelper.php:1080
+#: include/classes/widgets/CWidgetHelper.php:1082
 msgid "Aggregation function"
 msgstr ""
 
-#: include/classes/widgets/CWidgetHelper.php:1098
+#: include/classes/widgets/CWidgetHelper.php:1100
 msgid "Aggregation interval"
 msgstr ""
 
@@ -1399,9 +1399,9 @@ msgstr "배경색"
 msgid "Background image"
 msgstr "배경 이미지"
 
-#: include/classes/widgets/CWidgetHelper.php:722
-#: include/classes/widgets/CWidgetHelper.php:765
-#: include/classes/widgets/CWidgetHelper.php:1011
+#: include/classes/widgets/CWidgetHelper.php:724
+#: include/classes/widgets/CWidgetHelper.php:767
+#: include/classes/widgets/CWidgetHelper.php:1013
 msgid "Bar"
 msgstr ""
 
@@ -1409,8 +1409,8 @@ msgstr ""
 msgid "Base DN"
 msgstr "Base DN"
 
-#: include/classes/widgets/CWidgetHelper.php:748
-#: include/classes/widgets/CWidgetHelper.php:1002
+#: include/classes/widgets/CWidgetHelper.php:750
+#: include/classes/widgets/CWidgetHelper.php:1004
 msgid "Base colour"
 msgstr "기본 색상"
 
@@ -3247,7 +3247,7 @@ msgid "Close problem"
 msgstr "장애의 클로즈"
 
 #: include/classes/html/CCollapsibleUiWidget.php:55
-#: include/classes/widgets/CWidgetHelper.php:944 jsLoader.php:228
+#: include/classes/widgets/CWidgetHelper.php:946 jsLoader.php:228
 #: jsLoader.php:233
 msgid "Collapse"
 msgstr "축소"
@@ -3565,9 +3565,9 @@ msgstr "축하합니다! Zabbix frontend 설치가 종료되었습니다."
 msgid "Connect to"
 msgstr "접속 방법"
 
-#: include/classes/widgets/CWidgetHelper.php:728
-#: include/classes/widgets/CWidgetHelper.php:803
-#: include/classes/widgets/CWidgetHelper.php:1060
+#: include/classes/widgets/CWidgetHelper.php:730
+#: include/classes/widgets/CWidgetHelper.php:805
+#: include/classes/widgets/CWidgetHelper.php:1062
 msgctxt "missing data function"
 msgid "Connected"
 msgstr "접속됨"
@@ -3653,8 +3653,8 @@ msgstr "연락처"
 
 #: app/views/monitoring.problem.view.js.php:22
 #: app/views/monitoring.problem.view.php:240
-#: include/classes/widgets/CWidgetHelper.php:462
-#: include/classes/widgets/CWidgetHelper.php:508
+#: include/classes/widgets/CWidgetHelper.php:464
+#: include/classes/widgets/CWidgetHelper.php:510
 #: include/views/configuration.host.list.php:72
 #: include/views/configuration.maintenance.edit.php:185
 #: include/views/configuration.maintenance.edit.php:206
@@ -4231,7 +4231,7 @@ msgstr "데이터가 올바르게 인코딩되어 있지 않습니다."
 msgid "Data overview"
 msgstr "데이터 개요"
 
-#: include/classes/widgets/CWidgetHelper.php:1113
+#: include/classes/widgets/CWidgetHelper.php:1115
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:41
 #: include/classes/widgets/views/widget.svggraph.form.view.php:268
 msgid "Data set"
@@ -4434,8 +4434,8 @@ msgstr "연장 시간"
 #: app/views/administration.user.list.php:202
 #: app/views/monitoring.dashboard.list.php:76
 #: include/classes/html/CButtonDelete.php:25
-#: include/classes/widgets/CWidgetHelper.php:639
-#: include/classes/widgets/CWidgetHelper.php:988 include/services.inc.php:118
+#: include/classes/widgets/CWidgetHelper.php:641
+#: include/classes/widgets/CWidgetHelper.php:990 include/services.inc.php:118
 #: include/views/administration.auditlogs.list.php:48
 #: include/views/administration.general.regularexpressions.list.php:79
 #: include/views/administration.general.valuemapping.list.php:81
@@ -5238,12 +5238,12 @@ msgstr "설정 파일 다운로드"
 msgid "Downtime"
 msgstr "정지 시간"
 
-#: include/classes/widgets/CWidgetHelper.php:718
-#: include/classes/widgets/CWidgetHelper.php:762
-#: include/classes/widgets/CWidgetHelper.php:763
+#: include/classes/widgets/CWidgetHelper.php:720
 #: include/classes/widgets/CWidgetHelper.php:764
 #: include/classes/widgets/CWidgetHelper.php:765
-#: include/classes/widgets/CWidgetHelper.php:1006
+#: include/classes/widgets/CWidgetHelper.php:766
+#: include/classes/widgets/CWidgetHelper.php:767
+#: include/classes/widgets/CWidgetHelper.php:1008
 msgid "Draw"
 msgstr "그래프 형식"
 
@@ -5382,7 +5382,7 @@ msgstr "다이나믹 아이템"
 msgid "Each URL should have a unique name. Please make sure there is only one URL named"
 msgstr "각URL의 이름은 중복될 수 없습니다. 같은 URL 이름이 이용되지 않는지 확인해 주세요"
 
-#: include/classes/widgets/CWidgetHelper.php:1112
+#: include/classes/widgets/CWidgetHelper.php:1114
 msgid "Each item"
 msgstr ""
 
@@ -5772,8 +5772,8 @@ msgstr "영어 (en_US)"
 
 #: app/views/monitoring.problem.view.js.php:23
 #: app/views/monitoring.problem.view.php:241
-#: include/classes/widgets/CWidgetHelper.php:463
-#: include/classes/widgets/CWidgetHelper.php:509
+#: include/classes/widgets/CWidgetHelper.php:465
+#: include/classes/widgets/CWidgetHelper.php:511
 #: include/views/configuration.host.list.php:73
 #: include/views/configuration.maintenance.edit.php:186
 #: include/views/configuration.maintenance.edit.php:207
@@ -5927,7 +5927,7 @@ msgid "Execution confirmation"
 msgstr "실행 확인"
 
 #: include/classes/html/CCollapsibleUiWidget.php:60
-#: include/classes/widgets/CWidgetHelper.php:944 jsLoader.php:229
+#: include/classes/widgets/CWidgetHelper.php:946 jsLoader.php:229
 #: jsLoader.php:232
 msgid "Expand"
 msgstr "전개"
@@ -6203,9 +6203,7 @@ msgstr ""
 msgid "File time information. Returns integer (Unix timestamp)"
 msgstr "파일의 시간 정보. UNIX의 타임스탬프로 integer를 리턴"
 
-#: include/classes/widgets/CWidgetHelper.php:724
-#: include/classes/widgets/CWidgetHelper.php:779
-#: include/classes/widgets/CWidgetHelper.php:780
+#: include/classes/widgets/CWidgetHelper.php:726
 #: include/classes/widgets/CWidgetHelper.php:781
 #: include/classes/widgets/CWidgetHelper.php:782
 #: include/classes/widgets/CWidgetHelper.php:783
@@ -6215,7 +6213,9 @@ msgstr "파일의 시간 정보. UNIX의 타임스탬프로 integer를 리턴"
 #: include/classes/widgets/CWidgetHelper.php:787
 #: include/classes/widgets/CWidgetHelper.php:788
 #: include/classes/widgets/CWidgetHelper.php:789
-#: include/classes/widgets/CWidgetHelper.php:1040
+#: include/classes/widgets/CWidgetHelper.php:790
+#: include/classes/widgets/CWidgetHelper.php:791
+#: include/classes/widgets/CWidgetHelper.php:1042
 msgid "Fill"
 msgstr "채우기"
 
@@ -6229,7 +6229,7 @@ msgstr "면"
 #: app/views/administration.user.list.php:49
 #: app/views/monitoring.discovery.view.php:39
 #: app/views/monitoring.problem.view.php:342
-#: include/classes/html/CFilter.php:391
+#: include/classes/html/CFilter.php:394
 #: include/classes/widgets/forms/CWidgetFormMap.php:56
 #: include/forms.inc.php:732
 #: include/views/administration.auditacts.list.php:47
@@ -10000,9 +10000,9 @@ msgstr "라트비아어 (lv_LV)"
 msgid "Layout"
 msgstr ""
 
-#: include/classes/widgets/CWidgetHelper.php:731
-#: include/classes/widgets/CWidgetHelper.php:806
-#: include/classes/widgets/CWidgetHelper.php:1071
+#: include/classes/widgets/CWidgetHelper.php:733
+#: include/classes/widgets/CWidgetHelper.php:808
+#: include/classes/widgets/CWidgetHelper.php:1073
 #: include/classes/widgets/forms/CWidgetFormDataOver.php:59
 #: include/classes/widgets/forms/CWidgetFormPlainText.php:42
 #: include/classes/widgets/forms/CWidgetFormTrigOver.php:75
@@ -10039,9 +10039,9 @@ msgstr "범례"
 msgid "Limit for search and filter results"
 msgstr "검색/필터 항목의 상한치"
 
-#: include/classes/widgets/CWidgetHelper.php:719
-#: include/classes/widgets/CWidgetHelper.php:762
-#: include/classes/widgets/CWidgetHelper.php:1008 include/graphs.inc.php:55
+#: include/classes/widgets/CWidgetHelper.php:721
+#: include/classes/widgets/CWidgetHelper.php:764
+#: include/classes/widgets/CWidgetHelper.php:1010 include/graphs.inc.php:55
 #: include/views/js/monitoring.sysmaps.js.php:301
 #: include/views/js/monitoring.sysmaps.js.php:350
 #: include/views/js/monitoring.sysmaps.js.php:698
@@ -10876,11 +10876,11 @@ msgstr "그래프 프로토타입의 \"name\" 항목이 존재하지 않습니�
 msgid "Missing \"name\" field for graph."
 msgstr "그래프의 \"name\" 항목이 존재하지 않습니다."
 
-#: include/classes/widgets/CWidgetHelper.php:726
-#: include/classes/widgets/CWidgetHelper.php:802
-#: include/classes/widgets/CWidgetHelper.php:803
+#: include/classes/widgets/CWidgetHelper.php:728
 #: include/classes/widgets/CWidgetHelper.php:804
-#: include/classes/widgets/CWidgetHelper.php:1055
+#: include/classes/widgets/CWidgetHelper.php:805
+#: include/classes/widgets/CWidgetHelper.php:806
+#: include/classes/widgets/CWidgetHelper.php:1057
 msgid "Missing data"
 msgstr "결손 데이터"
 
@@ -11040,7 +11040,7 @@ msgstr "NTLM"
 #: app/views/popup.triggerwizard.php:77 correlation.php:35
 #: disc_prototypes.php:44 graphs.php:44 host_discovery.php:48 httpconf.php:42
 #: include/classes/screens/CScreenHttpTest.php:116
-#: include/classes/widgets/CWidgetHelper.php:59 include/forms.inc.php:296
+#: include/classes/widgets/CWidgetHelper.php:61 include/forms.inc.php:296
 #: include/forms.inc.php:1246 include/hosts.inc.php:109
 #: include/views/administration.general.iconmap.edit.php:43
 #: include/views/administration.general.iconmap.list.php:37
@@ -11842,9 +11842,9 @@ msgstr "boolean이 아닌 플래그는 폐지될 예정입니다."
 #: app/views/monitoring.problem.view.php:265
 #: app/views/monitoring.problem.view.php:276
 #: app/views/monitoring.problem.view.php:293
-#: include/classes/widgets/CWidgetHelper.php:727
-#: include/classes/widgets/CWidgetHelper.php:802
-#: include/classes/widgets/CWidgetHelper.php:1059
+#: include/classes/widgets/CWidgetHelper.php:729
+#: include/classes/widgets/CWidgetHelper.php:804
+#: include/classes/widgets/CWidgetHelper.php:1061
 #: include/classes/widgets/forms/CWidgetFormProblemsBySv.php:114
 #: include/classes/widgets/forms/CWidgetFormProblems.php:117
 #: include/classes/widgets/forms/CWidgetFormProblems.php:139
@@ -13069,9 +13069,7 @@ msgstr "Zabbix 서버의 호스트명이나 호스트 IP주소와 포트 번호�
 msgid "Please select two elements"
 msgstr "2개의 요소를 선택하여 주십시오"
 
-#: include/classes/widgets/CWidgetHelper.php:725
-#: include/classes/widgets/CWidgetHelper.php:791
-#: include/classes/widgets/CWidgetHelper.php:792
+#: include/classes/widgets/CWidgetHelper.php:727
 #: include/classes/widgets/CWidgetHelper.php:793
 #: include/classes/widgets/CWidgetHelper.php:794
 #: include/classes/widgets/CWidgetHelper.php:795
@@ -13080,13 +13078,15 @@ msgstr "2개의 요소를 선택하여 주십시오"
 #: include/classes/widgets/CWidgetHelper.php:798
 #: include/classes/widgets/CWidgetHelper.php:799
 #: include/classes/widgets/CWidgetHelper.php:800
-#: include/classes/widgets/CWidgetHelper.php:1023
+#: include/classes/widgets/CWidgetHelper.php:801
+#: include/classes/widgets/CWidgetHelper.php:802
+#: include/classes/widgets/CWidgetHelper.php:1025
 msgid "Point size"
 msgstr "포인트 사이즈"
 
-#: include/classes/widgets/CWidgetHelper.php:720
-#: include/classes/widgets/CWidgetHelper.php:763
-#: include/classes/widgets/CWidgetHelper.php:1009
+#: include/classes/widgets/CWidgetHelper.php:722
+#: include/classes/widgets/CWidgetHelper.php:765
+#: include/classes/widgets/CWidgetHelper.php:1011
 #: include/views/js/monitoring.sysmaps.js.php:370
 msgid "Points"
 msgstr "포인트"
@@ -13740,8 +13740,8 @@ msgstr "원격 명령"
 #: app/views/monitoring.problem.view.js.php:29
 #: app/views/monitoring.problem.view.php:200
 #: app/views/monitoring.problem.view.php:247 app/views/popup.media.php:41
-#: app/views/popup.media.php:95 include/classes/widgets/CWidgetHelper.php:472
-#: include/classes/widgets/CWidgetHelper.php:516 include/forms.inc.php:1467
+#: app/views/popup.media.php:95 include/classes/widgets/CWidgetHelper.php:474
+#: include/classes/widgets/CWidgetHelper.php:518 include/forms.inc.php:1467
 #: include/forms.inc.php:2357
 #: include/views/administration.general.iconmap.edit.php:84
 #: include/views/administration.general.macros.edit.php:62
@@ -14149,9 +14149,9 @@ msgstr "관련되지 않은 Zabbix Java Gateway의 정보를 리턴. 유효한 �
 msgid "Returns percentage of lost ICMP ping packets."
 msgstr "ICMP ping 패킷의 실패율을 리턴."
 
-#: include/classes/widgets/CWidgetHelper.php:732
-#: include/classes/widgets/CWidgetHelper.php:807
-#: include/classes/widgets/CWidgetHelper.php:1072
+#: include/classes/widgets/CWidgetHelper.php:734
+#: include/classes/widgets/CWidgetHelper.php:809
+#: include/classes/widgets/CWidgetHelper.php:1074
 #: include/views/js/configuration.graph.edit.js.php:82
 #: include/views/js/monitoring.sysmaps.js.php:12
 #: include/views/js/monitoring.sysmaps.js.php:121
@@ -14710,8 +14710,8 @@ msgstr "보안 이름"
 #: app/views/monitoring.problem.view.php:132 app/views/popup.generic.php:626
 #: app/views/popup.services.php:128 app/views/popup.triggerexpr.php:68
 #: include/classes/html/CMultiSelect.php:79
-#: include/classes/widgets/CWidgetHelper.php:333
-#: include/classes/widgets/CWidgetHelper.php:548 include/forms.inc.php:257
+#: include/classes/widgets/CWidgetHelper.php:335
+#: include/classes/widgets/CWidgetHelper.php:550 include/forms.inc.php:257
 #: include/views/administration.auditacts.list.php:30
 #: include/views/administration.auditlogs.list.php:31
 #: include/views/common.filter.trigger.php:72
@@ -15115,7 +15115,7 @@ msgstr "보이기"
 msgid "Show details"
 msgstr "자세히 표시"
 
-#: include/classes/widgets/CWidgetHelper.php:52
+#: include/classes/widgets/CWidgetHelper.php:54
 msgid "Show header"
 msgstr ""
 
@@ -15463,9 +15463,9 @@ msgstr "속도"
 msgid "Stacked"
 msgstr "누적 그래프"
 
-#: include/classes/widgets/CWidgetHelper.php:721
-#: include/classes/widgets/CWidgetHelper.php:764
-#: include/classes/widgets/CWidgetHelper.php:1010
+#: include/classes/widgets/CWidgetHelper.php:723
+#: include/classes/widgets/CWidgetHelper.php:766
+#: include/classes/widgets/CWidgetHelper.php:1012
 msgid "Staircase"
 msgstr "막대 그래프"
 
@@ -16331,9 +16331,9 @@ msgstr "기간"
 #: app/controllers/CControllerPopupTriggerExpr.php:155
 #: app/controllers/CControllerPopupTriggerExpr.php:169
 #: app/controllers/CControllerPopupTriggerExpr.php:198
-#: include/classes/widgets/CWidgetHelper.php:733
-#: include/classes/widgets/CWidgetHelper.php:809
-#: include/classes/widgets/CWidgetHelper.php:1075
+#: include/classes/widgets/CWidgetHelper.php:735
+#: include/classes/widgets/CWidgetHelper.php:811
+#: include/classes/widgets/CWidgetHelper.php:1077
 msgid "Time shift"
 msgstr "타임 시프트"
 
@@ -16437,9 +16437,7 @@ msgstr ""
 msgid "Transform SQL query result into a JSON array."
 msgstr ""
 
-#: include/classes/widgets/CWidgetHelper.php:723
-#: include/classes/widgets/CWidgetHelper.php:767
-#: include/classes/widgets/CWidgetHelper.php:768
+#: include/classes/widgets/CWidgetHelper.php:725
 #: include/classes/widgets/CWidgetHelper.php:769
 #: include/classes/widgets/CWidgetHelper.php:770
 #: include/classes/widgets/CWidgetHelper.php:771
@@ -16449,7 +16447,9 @@ msgstr ""
 #: include/classes/widgets/CWidgetHelper.php:775
 #: include/classes/widgets/CWidgetHelper.php:776
 #: include/classes/widgets/CWidgetHelper.php:777
-#: include/classes/widgets/CWidgetHelper.php:1031
+#: include/classes/widgets/CWidgetHelper.php:778
+#: include/classes/widgets/CWidgetHelper.php:779
+#: include/classes/widgets/CWidgetHelper.php:1033
 msgid "Transparency"
 msgstr "투명도"
 
@@ -16457,9 +16457,9 @@ msgstr "투명도"
 msgid "Transport error."
 msgstr "전송에러."
 
-#: include/classes/widgets/CWidgetHelper.php:729
-#: include/classes/widgets/CWidgetHelper.php:804
-#: include/classes/widgets/CWidgetHelper.php:1063
+#: include/classes/widgets/CWidgetHelper.php:731
+#: include/classes/widgets/CWidgetHelper.php:806
+#: include/classes/widgets/CWidgetHelper.php:1065
 msgctxt "missing data function"
 msgid "Treat as 0"
 msgstr "0 으로 처리"
@@ -16785,7 +16785,7 @@ msgstr "2개의 타입요소를 선택할 필요가 있습니다"
 #: app/views/popup.generic.php:87 app/views/popup.media.php:55
 #: app/views/popup.triggerwizard.php:43 app/views/popup.triggerwizard.php:112
 #: include/classes/screens/CScreenActions.php:113
-#: include/classes/widgets/CWidgetHelper.php:49
+#: include/classes/widgets/CWidgetHelper.php:50
 #: include/classes/widgets/forms/CWidgetFormActionLog.php:33
 #: include/classes/widgets/forms/CWidgetFormActionLog.php:34
 #: include/forms.inc.php:193 include/hosts.inc.php:99
@@ -17178,7 +17178,7 @@ msgstr "Up"
 #: app/views/administration.user.edit.php:474
 #: app/views/dashboard.sharing.edit.php:100
 #: app/views/monitoring.acknowledge.edit.php:87
-#: app/views/popup.httpstep.php:177 app/views/popup.media.php:111
+#: app/views/popup.httpstep.php:177 app/views/popup.media.php:112
 #: app/views/popup.triggerwizard.php:138
 #: include/views/administration.auditlogs.list.php:47
 #: include/views/administration.general.gui.edit.php:68
@@ -18164,9 +18164,7 @@ msgstr "연락 허용 시간대"
 msgid "Widget is too small for the specified number of columns and rows."
 msgstr ""
 
-#: graphs.php:45 include/classes/widgets/CWidgetHelper.php:717
-#: include/classes/widgets/CWidgetHelper.php:750
-#: include/classes/widgets/CWidgetHelper.php:751
+#: graphs.php:45 include/classes/widgets/CWidgetHelper.php:719
 #: include/classes/widgets/CWidgetHelper.php:752
 #: include/classes/widgets/CWidgetHelper.php:753
 #: include/classes/widgets/CWidgetHelper.php:754
@@ -18176,7 +18174,9 @@ msgstr ""
 #: include/classes/widgets/CWidgetHelper.php:758
 #: include/classes/widgets/CWidgetHelper.php:759
 #: include/classes/widgets/CWidgetHelper.php:760
-#: include/classes/widgets/CWidgetHelper.php:1015
+#: include/classes/widgets/CWidgetHelper.php:761
+#: include/classes/widgets/CWidgetHelper.php:762
+#: include/classes/widgets/CWidgetHelper.php:1017
 #: include/views/configuration.graph.edit.php:87
 #: include/views/configuration.graph.list.php:88
 #: include/views/js/monitoring.sysmaps.js.php:92
@@ -18366,10 +18366,10 @@ msgstr "Y축 최솟값"
 msgid "Y axis side"
 msgstr "Y축"
 
-#: include/classes/widgets/CWidgetHelper.php:730
-#: include/classes/widgets/CWidgetHelper.php:806
-#: include/classes/widgets/CWidgetHelper.php:807
-#: include/classes/widgets/CWidgetHelper.php:1069
+#: include/classes/widgets/CWidgetHelper.php:732
+#: include/classes/widgets/CWidgetHelper.php:808
+#: include/classes/widgets/CWidgetHelper.php:809
+#: include/classes/widgets/CWidgetHelper.php:1071
 msgid "Y-axis"
 msgstr "Y축"
 
@@ -19054,7 +19054,7 @@ msgstr "일"
 
 #: include/classes/pagefilter/CPageFilter.php:659
 #: include/classes/setup/CSetupWizard.php:306
-#: include/classes/widgets/CWidgetHelper.php:61
+#: include/classes/widgets/CWidgetHelper.php:63
 #: include/views/js/monitoring.slideconf.edit.js.php:14
 #: include/views/monitoring.slideconf.edit.php:132
 msgid "default"
@@ -19202,8 +19202,8 @@ msgstr "호스트 그룹"
 msgid "host is not monitored"
 msgstr "호스트가 비활성"
 
-#: include/classes/widgets/CWidgetHelper.php:593
-#: include/classes/widgets/CWidgetHelper.php:950
+#: include/classes/widgets/CWidgetHelper.php:595
+#: include/classes/widgets/CWidgetHelper.php:952
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:344
 msgid "host pattern"
 msgstr "호스트 패턴"
@@ -19317,8 +19317,8 @@ msgstr "아이템"
 msgid "item is disabled"
 msgstr "아이템이 비활성"
 
-#: include/classes/widgets/CWidgetHelper.php:613
-#: include/classes/widgets/CWidgetHelper.php:967
+#: include/classes/widgets/CWidgetHelper.php:615
+#: include/classes/widgets/CWidgetHelper.php:969
 msgid "item pattern"
 msgstr ""
 
@@ -19513,7 +19513,7 @@ msgstr "데이터 없음"
 msgid "nodata() - No data received during period of time T (1 - true, 0 - false)"
 msgstr "nodata() - 기간 T동안 취득한 데이터 없음 (1 - 데이터 없음, 0 - false)"
 
-#: include/classes/widgets/CWidgetHelper.php:1077 include/graphs.inc.php:92
+#: include/classes/widgets/CWidgetHelper.php:1079 include/graphs.inc.php:92
 msgid "none"
 msgstr "없음"
 
@@ -19759,8 +19759,8 @@ msgstr "지정된 자격 정보는 유니크 값이 아닙니다."
 #: app/views/monitoring.problem.view.js.php:19
 #: app/views/monitoring.problem.view.php:237
 #: include/classes/api/services/CUserGroup.php:463
-#: include/classes/widgets/CWidgetHelper.php:457
-#: include/classes/widgets/CWidgetHelper.php:504 include/forms.inc.php:2350
+#: include/classes/widgets/CWidgetHelper.php:459
+#: include/classes/widgets/CWidgetHelper.php:506 include/forms.inc.php:2350
 #: include/views/administration.usergroups.edit.php:241
 #: include/views/configuration.action.edit.php:360
 #: include/views/configuration.action.edit.php:370
@@ -19946,8 +19946,8 @@ msgstr "지원되지 않는 버전의 번호입니다."
 #: app/views/popup.preproctestedit.view.js.php:209
 #: app/views/popup.preproctestedit.view.js.php:220
 #: app/views/popup.preproctestedit.view.php:47
-#: include/classes/widgets/CWidgetHelper.php:467
-#: include/classes/widgets/CWidgetHelper.php:512
+#: include/classes/widgets/CWidgetHelper.php:469
+#: include/classes/widgets/CWidgetHelper.php:514
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:176
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:251
 #: include/forms.inc.php:2355

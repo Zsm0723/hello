@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zabbix 4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-19 14:13+0300\n"
+"POT-Creation-Date: 2020-05-18 12:32+0300\n"
 "PO-Revision-Date: 2020-02-10 08:08+0300\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Zabbix <info@zabbix.com>\n"
@@ -320,7 +320,7 @@ msgstr ""
 msgid "<sub-menu/sub-menu/...>script"
 msgstr "<子菜单/子菜单/ ...>脚本"
 
-#: include/classes/widgets/CWidgetHelper.php:746
+#: include/classes/widgets/CWidgetHelper.php:748
 msgid "ADD OVERRIDE"
 msgstr "添加覆盖"
 
@@ -574,9 +574,9 @@ msgstr "启用直到"
 #: app/views/monitoring.problem.view.php:257 app/views/popup.httpstep.php:69
 #: app/views/popup.httpstep.php:95 app/views/popup.httpstep.php:119
 #: app/views/popup.httpstep.php:138 app/views/popup.httpstep.php:177
-#: app/views/popup.media.php:48 app/views/popup.media.php:111
+#: app/views/popup.media.php:48 app/views/popup.media.php:112
 #: app/views/popup.triggerwizard.php:104 app/views/popup.triggerwizard.php:138
-#: include/classes/widgets/CWidgetHelper.php:484 include/forms.inc.php:1487
+#: include/classes/widgets/CWidgetHelper.php:486 include/forms.inc.php:1487
 #: include/forms.inc.php:2382
 #: include/views/administration.auditlogs.list.php:46
 #: include/views/administration.general.iconmap.edit.php:101
@@ -726,11 +726,11 @@ msgstr "添加主机"
 msgid "Add multiple maps"
 msgstr "添加多个拓扑图"
 
-#: include/classes/widgets/CWidgetHelper.php:1167
+#: include/classes/widgets/CWidgetHelper.php:1169
 msgid "Add new data set"
 msgstr "添加新数据集"
 
-#: include/classes/widgets/CWidgetHelper.php:700
+#: include/classes/widgets/CWidgetHelper.php:702
 msgid "Add new override"
 msgstr "添加新的覆盖"
 
@@ -831,7 +831,7 @@ msgstr "agent代理程序的接口"
 msgid "Agent or SNMP or JMX or IPMI interface"
 msgstr "agent代理程序或SNMP或JMX或IPMI的接口"
 
-#: include/classes/widgets/CWidgetHelper.php:1107
+#: include/classes/widgets/CWidgetHelper.php:1109
 msgid "Aggregate"
 msgstr ""
 
@@ -839,11 +839,11 @@ msgstr ""
 msgid "Aggregate checks do not require any agent running on a host being monitored. Zabbix server collects aggregate information by doing direct database queries. See Zabbix Manual."
 msgstr "聚合检查不需要在被监控主机上运行任何代理程序。Zabbix服务器直接通过数据库查询来收集聚合信息。参阅Zabbix手册。"
 
-#: include/classes/widgets/CWidgetHelper.php:1080
+#: include/classes/widgets/CWidgetHelper.php:1082
 msgid "Aggregation function"
 msgstr ""
 
-#: include/classes/widgets/CWidgetHelper.php:1098
+#: include/classes/widgets/CWidgetHelper.php:1100
 msgid "Aggregation interval"
 msgstr ""
 
@@ -1405,9 +1405,9 @@ msgstr "背景色"
 msgid "Background image"
 msgstr "背景图片"
 
-#: include/classes/widgets/CWidgetHelper.php:722
-#: include/classes/widgets/CWidgetHelper.php:765
-#: include/classes/widgets/CWidgetHelper.php:1011
+#: include/classes/widgets/CWidgetHelper.php:724
+#: include/classes/widgets/CWidgetHelper.php:767
+#: include/classes/widgets/CWidgetHelper.php:1013
 msgid "Bar"
 msgstr ""
 
@@ -1415,8 +1415,8 @@ msgstr ""
 msgid "Base DN"
 msgstr "基于 DN"
 
-#: include/classes/widgets/CWidgetHelper.php:748
-#: include/classes/widgets/CWidgetHelper.php:1002
+#: include/classes/widgets/CWidgetHelper.php:750
+#: include/classes/widgets/CWidgetHelper.php:1004
 msgid "Base colour"
 msgstr "基色"
 
@@ -3253,7 +3253,7 @@ msgid "Close problem"
 msgstr "关闭问题"
 
 #: include/classes/html/CCollapsibleUiWidget.php:55
-#: include/classes/widgets/CWidgetHelper.php:944 jsLoader.php:228
+#: include/classes/widgets/CWidgetHelper.php:946 jsLoader.php:228
 #: jsLoader.php:233
 msgid "Collapse"
 msgstr "宕机"
@@ -3571,9 +3571,9 @@ msgstr "恩！不错zabbix前端已经配置好了！千山万水第一步！加
 msgid "Connect to"
 msgstr "连接到"
 
-#: include/classes/widgets/CWidgetHelper.php:728
-#: include/classes/widgets/CWidgetHelper.php:803
-#: include/classes/widgets/CWidgetHelper.php:1060
+#: include/classes/widgets/CWidgetHelper.php:730
+#: include/classes/widgets/CWidgetHelper.php:805
+#: include/classes/widgets/CWidgetHelper.php:1062
 msgctxt "missing data function"
 msgid "Connected"
 msgstr "已连接"
@@ -3659,8 +3659,8 @@ msgstr "联系"
 
 #: app/views/monitoring.problem.view.js.php:22
 #: app/views/monitoring.problem.view.php:240
-#: include/classes/widgets/CWidgetHelper.php:462
-#: include/classes/widgets/CWidgetHelper.php:508
+#: include/classes/widgets/CWidgetHelper.php:464
+#: include/classes/widgets/CWidgetHelper.php:510
 #: include/views/configuration.host.list.php:72
 #: include/views/configuration.maintenance.edit.php:185
 #: include/views/configuration.maintenance.edit.php:206
@@ -4237,7 +4237,7 @@ msgstr "数据不正确的编码。"
 msgid "Data overview"
 msgstr "数据概览"
 
-#: include/classes/widgets/CWidgetHelper.php:1113
+#: include/classes/widgets/CWidgetHelper.php:1115
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:41
 #: include/classes/widgets/views/widget.svggraph.form.view.php:268
 msgid "Data set"
@@ -4440,8 +4440,8 @@ msgstr "被延迟由于"
 #: app/views/administration.user.list.php:202
 #: app/views/monitoring.dashboard.list.php:76
 #: include/classes/html/CButtonDelete.php:25
-#: include/classes/widgets/CWidgetHelper.php:639
-#: include/classes/widgets/CWidgetHelper.php:988 include/services.inc.php:118
+#: include/classes/widgets/CWidgetHelper.php:641
+#: include/classes/widgets/CWidgetHelper.php:990 include/services.inc.php:118
 #: include/views/administration.auditlogs.list.php:48
 #: include/views/administration.general.regularexpressions.list.php:79
 #: include/views/administration.general.valuemapping.list.php:81
@@ -5243,12 +5243,12 @@ msgstr "下载配置文件"
 msgid "Downtime"
 msgstr "断线时间"
 
-#: include/classes/widgets/CWidgetHelper.php:718
-#: include/classes/widgets/CWidgetHelper.php:762
-#: include/classes/widgets/CWidgetHelper.php:763
+#: include/classes/widgets/CWidgetHelper.php:720
 #: include/classes/widgets/CWidgetHelper.php:764
 #: include/classes/widgets/CWidgetHelper.php:765
-#: include/classes/widgets/CWidgetHelper.php:1006
+#: include/classes/widgets/CWidgetHelper.php:766
+#: include/classes/widgets/CWidgetHelper.php:767
+#: include/classes/widgets/CWidgetHelper.php:1008
 msgid "Draw"
 msgstr "绘制"
 
@@ -5387,7 +5387,7 @@ msgstr "动态监控项"
 msgid "Each URL should have a unique name. Please make sure there is only one URL named"
 msgstr "每个URL必须是唯一的. 请确保只有一个被命名的 URL."
 
-#: include/classes/widgets/CWidgetHelper.php:1112
+#: include/classes/widgets/CWidgetHelper.php:1114
 msgid "Each item"
 msgstr ""
 
@@ -5777,8 +5777,8 @@ msgstr "英语(en_US)"
 
 #: app/views/monitoring.problem.view.js.php:23
 #: app/views/monitoring.problem.view.php:241
-#: include/classes/widgets/CWidgetHelper.php:463
-#: include/classes/widgets/CWidgetHelper.php:509
+#: include/classes/widgets/CWidgetHelper.php:465
+#: include/classes/widgets/CWidgetHelper.php:511
 #: include/views/configuration.host.list.php:73
 #: include/views/configuration.maintenance.edit.php:186
 #: include/views/configuration.maintenance.edit.php:207
@@ -5932,7 +5932,7 @@ msgid "Execution confirmation"
 msgstr "执行确认"
 
 #: include/classes/html/CCollapsibleUiWidget.php:60
-#: include/classes/widgets/CWidgetHelper.php:944 jsLoader.php:229
+#: include/classes/widgets/CWidgetHelper.php:946 jsLoader.php:229
 #: jsLoader.php:232
 msgid "Expand"
 msgstr "扩展"
@@ -6208,9 +6208,7 @@ msgstr ""
 msgid "File time information. Returns integer (Unix timestamp)"
 msgstr "文件事件信息，返回的是时间戳 整数"
 
-#: include/classes/widgets/CWidgetHelper.php:724
-#: include/classes/widgets/CWidgetHelper.php:779
-#: include/classes/widgets/CWidgetHelper.php:780
+#: include/classes/widgets/CWidgetHelper.php:726
 #: include/classes/widgets/CWidgetHelper.php:781
 #: include/classes/widgets/CWidgetHelper.php:782
 #: include/classes/widgets/CWidgetHelper.php:783
@@ -6220,7 +6218,9 @@ msgstr "文件事件信息，返回的是时间戳 整数"
 #: include/classes/widgets/CWidgetHelper.php:787
 #: include/classes/widgets/CWidgetHelper.php:788
 #: include/classes/widgets/CWidgetHelper.php:789
-#: include/classes/widgets/CWidgetHelper.php:1040
+#: include/classes/widgets/CWidgetHelper.php:790
+#: include/classes/widgets/CWidgetHelper.php:791
+#: include/classes/widgets/CWidgetHelper.php:1042
 msgid "Fill"
 msgstr "填"
 
@@ -6234,7 +6234,7 @@ msgstr "填满的区域"
 #: app/views/administration.user.list.php:49
 #: app/views/monitoring.discovery.view.php:39
 #: app/views/monitoring.problem.view.php:342
-#: include/classes/html/CFilter.php:391
+#: include/classes/html/CFilter.php:394
 #: include/classes/widgets/forms/CWidgetFormMap.php:56
 #: include/forms.inc.php:732
 #: include/views/administration.auditacts.list.php:47
@@ -10008,9 +10008,9 @@ msgstr "拉脱维亚语(lv_LV)"
 msgid "Layout"
 msgstr ""
 
-#: include/classes/widgets/CWidgetHelper.php:731
-#: include/classes/widgets/CWidgetHelper.php:806
-#: include/classes/widgets/CWidgetHelper.php:1071
+#: include/classes/widgets/CWidgetHelper.php:733
+#: include/classes/widgets/CWidgetHelper.php:808
+#: include/classes/widgets/CWidgetHelper.php:1073
 #: include/classes/widgets/forms/CWidgetFormDataOver.php:59
 #: include/classes/widgets/forms/CWidgetFormPlainText.php:42
 #: include/classes/widgets/forms/CWidgetFormTrigOver.php:75
@@ -10048,9 +10048,9 @@ msgstr "图例"
 msgid "Limit for search and filter results"
 msgstr "搜索/过滤组件限制"
 
-#: include/classes/widgets/CWidgetHelper.php:719
-#: include/classes/widgets/CWidgetHelper.php:762
-#: include/classes/widgets/CWidgetHelper.php:1008 include/graphs.inc.php:55
+#: include/classes/widgets/CWidgetHelper.php:721
+#: include/classes/widgets/CWidgetHelper.php:764
+#: include/classes/widgets/CWidgetHelper.php:1010 include/graphs.inc.php:55
 #: include/views/js/monitoring.sysmaps.js.php:301
 #: include/views/js/monitoring.sysmaps.js.php:350
 #: include/views/js/monitoring.sysmaps.js.php:698
@@ -10885,11 +10885,11 @@ msgstr "数据图模板缺失\"name\"字段"
 msgid "Missing \"name\" field for graph."
 msgstr "缺少\"名称\"的图形栏位"
 
-#: include/classes/widgets/CWidgetHelper.php:726
-#: include/classes/widgets/CWidgetHelper.php:802
-#: include/classes/widgets/CWidgetHelper.php:803
+#: include/classes/widgets/CWidgetHelper.php:728
 #: include/classes/widgets/CWidgetHelper.php:804
-#: include/classes/widgets/CWidgetHelper.php:1055
+#: include/classes/widgets/CWidgetHelper.php:805
+#: include/classes/widgets/CWidgetHelper.php:806
+#: include/classes/widgets/CWidgetHelper.php:1057
 msgid "Missing data"
 msgstr "缺少数据"
 
@@ -11049,7 +11049,7 @@ msgstr "NTLM"
 #: app/views/popup.triggerwizard.php:77 correlation.php:35
 #: disc_prototypes.php:44 graphs.php:44 host_discovery.php:48 httpconf.php:42
 #: include/classes/screens/CScreenHttpTest.php:116
-#: include/classes/widgets/CWidgetHelper.php:59 include/forms.inc.php:296
+#: include/classes/widgets/CWidgetHelper.php:61 include/forms.inc.php:296
 #: include/forms.inc.php:1246 include/hosts.inc.php:109
 #: include/views/administration.general.iconmap.edit.php:43
 #: include/views/administration.general.iconmap.list.php:37
@@ -11851,9 +11851,9 @@ msgstr "不推荐使用非布尔标志。"
 #: app/views/monitoring.problem.view.php:265
 #: app/views/monitoring.problem.view.php:276
 #: app/views/monitoring.problem.view.php:293
-#: include/classes/widgets/CWidgetHelper.php:727
-#: include/classes/widgets/CWidgetHelper.php:802
-#: include/classes/widgets/CWidgetHelper.php:1059
+#: include/classes/widgets/CWidgetHelper.php:729
+#: include/classes/widgets/CWidgetHelper.php:804
+#: include/classes/widgets/CWidgetHelper.php:1061
 #: include/classes/widgets/forms/CWidgetFormProblemsBySv.php:114
 #: include/classes/widgets/forms/CWidgetFormProblems.php:117
 #: include/classes/widgets/forms/CWidgetFormProblems.php:139
@@ -13079,9 +13079,7 @@ msgstr "请输入主机名或主机IP地址和zabbix服务器的端口号，以�
 msgid "Please select two elements"
 msgstr "请选择两个组件"
 
-#: include/classes/widgets/CWidgetHelper.php:725
-#: include/classes/widgets/CWidgetHelper.php:791
-#: include/classes/widgets/CWidgetHelper.php:792
+#: include/classes/widgets/CWidgetHelper.php:727
 #: include/classes/widgets/CWidgetHelper.php:793
 #: include/classes/widgets/CWidgetHelper.php:794
 #: include/classes/widgets/CWidgetHelper.php:795
@@ -13090,13 +13088,15 @@ msgstr "请选择两个组件"
 #: include/classes/widgets/CWidgetHelper.php:798
 #: include/classes/widgets/CWidgetHelper.php:799
 #: include/classes/widgets/CWidgetHelper.php:800
-#: include/classes/widgets/CWidgetHelper.php:1023
+#: include/classes/widgets/CWidgetHelper.php:801
+#: include/classes/widgets/CWidgetHelper.php:802
+#: include/classes/widgets/CWidgetHelper.php:1025
 msgid "Point size"
 msgstr "点尺寸"
 
-#: include/classes/widgets/CWidgetHelper.php:720
-#: include/classes/widgets/CWidgetHelper.php:763
-#: include/classes/widgets/CWidgetHelper.php:1009
+#: include/classes/widgets/CWidgetHelper.php:722
+#: include/classes/widgets/CWidgetHelper.php:765
+#: include/classes/widgets/CWidgetHelper.php:1011
 #: include/views/js/monitoring.sysmaps.js.php:370
 msgid "Points"
 msgstr "点"
@@ -13750,8 +13750,8 @@ msgstr "远程命令"
 #: app/views/monitoring.problem.view.js.php:29
 #: app/views/monitoring.problem.view.php:200
 #: app/views/monitoring.problem.view.php:247 app/views/popup.media.php:41
-#: app/views/popup.media.php:95 include/classes/widgets/CWidgetHelper.php:472
-#: include/classes/widgets/CWidgetHelper.php:516 include/forms.inc.php:1467
+#: app/views/popup.media.php:95 include/classes/widgets/CWidgetHelper.php:474
+#: include/classes/widgets/CWidgetHelper.php:518 include/forms.inc.php:1467
 #: include/forms.inc.php:2357
 #: include/views/administration.general.iconmap.edit.php:84
 #: include/views/administration.general.macros.edit.php:62
@@ -14161,9 +14161,9 @@ msgstr "返回与Zabbix Java应用网关相关联的信息。可用的参数有�
 msgid "Returns percentage of lost ICMP ping packets."
 msgstr "返回ICMP ping包丢失的百分数."
 
-#: include/classes/widgets/CWidgetHelper.php:732
-#: include/classes/widgets/CWidgetHelper.php:807
-#: include/classes/widgets/CWidgetHelper.php:1072
+#: include/classes/widgets/CWidgetHelper.php:734
+#: include/classes/widgets/CWidgetHelper.php:809
+#: include/classes/widgets/CWidgetHelper.php:1074
 #: include/views/js/configuration.graph.edit.js.php:82
 #: include/views/js/monitoring.sysmaps.js.php:12
 #: include/views/js/monitoring.sysmaps.js.php:121
@@ -14723,8 +14723,8 @@ msgstr "安全名称"
 #: app/views/monitoring.problem.view.php:132 app/views/popup.generic.php:626
 #: app/views/popup.services.php:128 app/views/popup.triggerexpr.php:68
 #: include/classes/html/CMultiSelect.php:79
-#: include/classes/widgets/CWidgetHelper.php:333
-#: include/classes/widgets/CWidgetHelper.php:548 include/forms.inc.php:257
+#: include/classes/widgets/CWidgetHelper.php:335
+#: include/classes/widgets/CWidgetHelper.php:550 include/forms.inc.php:257
 #: include/views/administration.auditacts.list.php:30
 #: include/views/administration.auditlogs.list.php:31
 #: include/views/common.filter.trigger.php:72
@@ -15128,7 +15128,7 @@ msgstr "查看"
 msgid "Show details"
 msgstr "查看细节"
 
-#: include/classes/widgets/CWidgetHelper.php:52
+#: include/classes/widgets/CWidgetHelper.php:54
 msgid "Show header"
 msgstr ""
 
@@ -15476,9 +15476,9 @@ msgstr "速度"
 msgid "Stacked"
 msgstr "层积的"
 
-#: include/classes/widgets/CWidgetHelper.php:721
-#: include/classes/widgets/CWidgetHelper.php:764
-#: include/classes/widgets/CWidgetHelper.php:1010
+#: include/classes/widgets/CWidgetHelper.php:723
+#: include/classes/widgets/CWidgetHelper.php:766
+#: include/classes/widgets/CWidgetHelper.php:1012
 msgid "Staircase"
 msgstr "楼梯"
 
@@ -16345,9 +16345,9 @@ msgstr "时间期间"
 #: app/controllers/CControllerPopupTriggerExpr.php:155
 #: app/controllers/CControllerPopupTriggerExpr.php:169
 #: app/controllers/CControllerPopupTriggerExpr.php:198
-#: include/classes/widgets/CWidgetHelper.php:733
-#: include/classes/widgets/CWidgetHelper.php:809
-#: include/classes/widgets/CWidgetHelper.php:1075
+#: include/classes/widgets/CWidgetHelper.php:735
+#: include/classes/widgets/CWidgetHelper.php:811
+#: include/classes/widgets/CWidgetHelper.php:1077
 msgid "Time shift"
 msgstr "间隔(秒)"
 
@@ -16451,9 +16451,7 @@ msgstr ""
 msgid "Transform SQL query result into a JSON array."
 msgstr ""
 
-#: include/classes/widgets/CWidgetHelper.php:723
-#: include/classes/widgets/CWidgetHelper.php:767
-#: include/classes/widgets/CWidgetHelper.php:768
+#: include/classes/widgets/CWidgetHelper.php:725
 #: include/classes/widgets/CWidgetHelper.php:769
 #: include/classes/widgets/CWidgetHelper.php:770
 #: include/classes/widgets/CWidgetHelper.php:771
@@ -16463,7 +16461,9 @@ msgstr ""
 #: include/classes/widgets/CWidgetHelper.php:775
 #: include/classes/widgets/CWidgetHelper.php:776
 #: include/classes/widgets/CWidgetHelper.php:777
-#: include/classes/widgets/CWidgetHelper.php:1031
+#: include/classes/widgets/CWidgetHelper.php:778
+#: include/classes/widgets/CWidgetHelper.php:779
+#: include/classes/widgets/CWidgetHelper.php:1033
 msgid "Transparency"
 msgstr "透明度"
 
@@ -16471,9 +16471,9 @@ msgstr "透明度"
 msgid "Transport error."
 msgstr "传输错误."
 
-#: include/classes/widgets/CWidgetHelper.php:729
-#: include/classes/widgets/CWidgetHelper.php:804
-#: include/classes/widgets/CWidgetHelper.php:1063
+#: include/classes/widgets/CWidgetHelper.php:731
+#: include/classes/widgets/CWidgetHelper.php:806
+#: include/classes/widgets/CWidgetHelper.php:1065
 msgctxt "missing data function"
 msgid "Treat as 0"
 msgstr "视为 0"
@@ -16799,7 +16799,7 @@ msgstr "应选择两个拓扑元素"
 #: app/views/popup.generic.php:87 app/views/popup.media.php:55
 #: app/views/popup.triggerwizard.php:43 app/views/popup.triggerwizard.php:112
 #: include/classes/screens/CScreenActions.php:113
-#: include/classes/widgets/CWidgetHelper.php:49
+#: include/classes/widgets/CWidgetHelper.php:50
 #: include/classes/widgets/forms/CWidgetFormActionLog.php:33
 #: include/classes/widgets/forms/CWidgetFormActionLog.php:34
 #: include/forms.inc.php:193 include/hosts.inc.php:99
@@ -17192,7 +17192,7 @@ msgstr "上"
 #: app/views/administration.user.edit.php:474
 #: app/views/dashboard.sharing.edit.php:100
 #: app/views/monitoring.acknowledge.edit.php:87
-#: app/views/popup.httpstep.php:177 app/views/popup.media.php:111
+#: app/views/popup.httpstep.php:177 app/views/popup.media.php:112
 #: app/views/popup.triggerwizard.php:138
 #: include/views/administration.auditlogs.list.php:47
 #: include/views/administration.general.gui.edit.php:68
@@ -18178,9 +18178,7 @@ msgstr "当启用时"
 msgid "Widget is too small for the specified number of columns and rows."
 msgstr ""
 
-#: graphs.php:45 include/classes/widgets/CWidgetHelper.php:717
-#: include/classes/widgets/CWidgetHelper.php:750
-#: include/classes/widgets/CWidgetHelper.php:751
+#: graphs.php:45 include/classes/widgets/CWidgetHelper.php:719
 #: include/classes/widgets/CWidgetHelper.php:752
 #: include/classes/widgets/CWidgetHelper.php:753
 #: include/classes/widgets/CWidgetHelper.php:754
@@ -18190,7 +18188,9 @@ msgstr ""
 #: include/classes/widgets/CWidgetHelper.php:758
 #: include/classes/widgets/CWidgetHelper.php:759
 #: include/classes/widgets/CWidgetHelper.php:760
-#: include/classes/widgets/CWidgetHelper.php:1015
+#: include/classes/widgets/CWidgetHelper.php:761
+#: include/classes/widgets/CWidgetHelper.php:762
+#: include/classes/widgets/CWidgetHelper.php:1017
 #: include/views/configuration.graph.edit.php:87
 #: include/views/configuration.graph.list.php:88
 #: include/views/js/monitoring.sysmaps.js.php:92
@@ -18380,10 +18380,10 @@ msgstr "纵轴Y最小值MIN"
 msgid "Y axis side"
 msgstr "纵轴Y侧"
 
-#: include/classes/widgets/CWidgetHelper.php:730
-#: include/classes/widgets/CWidgetHelper.php:806
-#: include/classes/widgets/CWidgetHelper.php:807
-#: include/classes/widgets/CWidgetHelper.php:1069
+#: include/classes/widgets/CWidgetHelper.php:732
+#: include/classes/widgets/CWidgetHelper.php:808
+#: include/classes/widgets/CWidgetHelper.php:809
+#: include/classes/widgets/CWidgetHelper.php:1071
 msgid "Y-axis"
 msgstr "Y轴"
 
@@ -19067,7 +19067,7 @@ msgstr "日"
 
 #: include/classes/pagefilter/CPageFilter.php:659
 #: include/classes/setup/CSetupWizard.php:306
-#: include/classes/widgets/CWidgetHelper.php:61
+#: include/classes/widgets/CWidgetHelper.php:63
 #: include/views/js/monitoring.slideconf.edit.js.php:14
 #: include/views/monitoring.slideconf.edit.php:132
 msgid "default"
@@ -19215,8 +19215,8 @@ msgstr "主机群组"
 msgid "host is not monitored"
 msgstr "主机不受监控"
 
-#: include/classes/widgets/CWidgetHelper.php:593
-#: include/classes/widgets/CWidgetHelper.php:950
+#: include/classes/widgets/CWidgetHelper.php:595
+#: include/classes/widgets/CWidgetHelper.php:952
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:344
 msgid "host pattern"
 msgstr "主机样式"
@@ -19330,8 +19330,8 @@ msgstr "监控项"
 msgid "item is disabled"
 msgstr "监控项被禁用"
 
-#: include/classes/widgets/CWidgetHelper.php:613
-#: include/classes/widgets/CWidgetHelper.php:967
+#: include/classes/widgets/CWidgetHelper.php:615
+#: include/classes/widgets/CWidgetHelper.php:969
 msgid "item pattern"
 msgstr ""
 
@@ -19526,7 +19526,7 @@ msgstr "没有数据"
 msgid "nodata() - No data received during period of time T (1 - true, 0 - false)"
 msgstr "nodata() - 在周期 T 内没有收到数据（1 - true，0 - false）"
 
-#: include/classes/widgets/CWidgetHelper.php:1077 include/graphs.inc.php:92
+#: include/classes/widgets/CWidgetHelper.php:1079 include/graphs.inc.php:92
 msgid "none"
 msgstr "无"
 
@@ -19772,8 +19772,8 @@ msgstr "提供的凭据不是唯一的"
 #: app/views/monitoring.problem.view.js.php:19
 #: app/views/monitoring.problem.view.php:237
 #: include/classes/api/services/CUserGroup.php:463
-#: include/classes/widgets/CWidgetHelper.php:457
-#: include/classes/widgets/CWidgetHelper.php:504 include/forms.inc.php:2350
+#: include/classes/widgets/CWidgetHelper.php:459
+#: include/classes/widgets/CWidgetHelper.php:506 include/forms.inc.php:2350
 #: include/views/administration.usergroups.edit.php:241
 #: include/views/configuration.action.edit.php:360
 #: include/views/configuration.action.edit.php:370
@@ -19959,8 +19959,8 @@ msgstr "这个版本已经不被支持"
 #: app/views/popup.preproctestedit.view.js.php:209
 #: app/views/popup.preproctestedit.view.js.php:220
 #: app/views/popup.preproctestedit.view.php:47
-#: include/classes/widgets/CWidgetHelper.php:467
-#: include/classes/widgets/CWidgetHelper.php:512
+#: include/classes/widgets/CWidgetHelper.php:469
+#: include/classes/widgets/CWidgetHelper.php:514
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:176
 #: include/classes/widgets/forms/CWidgetFormSvgGraph.php:251
 #: include/forms.inc.php:2355
