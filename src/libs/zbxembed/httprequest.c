@@ -226,6 +226,7 @@ static duk_ret_t	es_httprequest_query(duk_context *ctx, const char *http_request
 	{
 		if (SUCCEED != zbx_cesu8_to_utf8(duk_to_string(ctx, 1), &contents))
 		{
+			zbx_free(url);	/* free before longjmp()*/
 			ret = duk_error(ctx, DUK_RET_TYPE_ERROR, "cannot convert request contents to utf8");
 			goto out;
 		}
@@ -233,6 +234,8 @@ static duk_ret_t	es_httprequest_query(duk_context *ctx, const char *http_request
 
 	if (NULL == (request = es_httprequest(ctx)))
 	{
+		zbx_free(url);		/* free before longjmp()*/
+		zbx_free(contents);
 		ret = duk_error(ctx, DUK_RET_TYPE_ERROR, "internal scripting error: null object");
 		goto out;
 	}
@@ -266,6 +269,8 @@ static duk_ret_t	es_httprequest_query(duk_context *ctx, const char *http_request
 
 	if (CURLE_OK != (err = curl_easy_perform(request->handle)))
 	{
+		zbx_free(url);		/* free before longjmp()*/
+		zbx_free(contents);
 		ret = duk_error(ctx, DUK_RET_TYPE_ERROR, "cannot get URL: %s.", curl_easy_strerror(err));
 		goto out;
 	}
