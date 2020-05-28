@@ -58,7 +58,8 @@ class CDashboardElement extends CElement {
 	 * @return CElementCollection
 	 */
 	public function getWidgets() {
-		return $this->query('class:dashbrd-grid-widget')->asWidget()->all();
+		return $this->query('xpath:.//div[@class="dashbrd-grid-widget" or contains(@class, "dashbrd-grid-widget ") or '.
+				'@class="dashbrd-grid-iterator" or contains(@class, "dashbrd-grid-iterator ")]')->asWidget()->all();
 	}
 
 	/**
@@ -70,8 +71,9 @@ class CDashboardElement extends CElement {
 	 * @return CWidgetElement|CNullElement
 	 */
 	public function getWidget($name, $should_exist = true) {
-		$query = $this->query('xpath:.//div[contains(@class, "dashbrd-grid-widget-head")]/h4[text()='.
-				CXPathHelper::escapeQuotes($name).']/../../..');
+		$query = $this->query('xpath:.//div[contains(@class, "dashbrd-grid-widget-head") or '.
+			'contains(@class, "dashbrd-grid-iterator-head")]/h4[text()='.
+			CXPathHelper::escapeQuotes($name).']/../../..');
 
 		if ($should_exist) {
 			$query->waitUntilPresent();
@@ -168,6 +170,34 @@ class CDashboardElement extends CElement {
 	public function deleteWidget($name) {
 		$this->query('xpath:.//div[contains(@class, "dashbrd-grid-widget-head")]/h4[text()="'.$name.
 				'"]/../ul/li/button[@title="Actions"]')->asPopupButton()->one()->select('Delete')->waitUntilNotVisible();
+
+		return $this;
+	}
+
+	/**
+	 * Copy widget with the provided name.
+	 *
+	 * @return boolean
+	 */
+	public function copyWidget($name) {
+		$this->query('xpath:.//div[contains(@class, "dashbrd-grid-widget-head") or contains(@class, "dashbrd-grid-iterator-head")]/h4[text()="'.$name.
+				'"]/../ul/li/button[@title="Actions"]')->asPopupButton()->one()->select('Copy');
+
+		return $this;
+	}
+
+	/**
+	 * Paste copied widget.
+	 * Dashboard should be in editing mode.
+	 *
+	 * @return $this
+	 */
+	public function pasteWidget() {
+		$controls = $this->getControls();
+
+		if ($controls->query('xpath:.//nav[@class="dashbrd-edit"]')->one()->isDisplayed()) {
+			$controls->query('id:dashbrd-paste-widget')->one()->waitUntilClickable()->click(true);
+		}
 
 		return $this;
 	}
