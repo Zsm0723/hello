@@ -2374,7 +2374,7 @@ INSERT INTO media_type (mediatypeid, type, name, status, script, show_event_menu
 INSERT INTO event_tag (eventtagid, eventid, tag, value) VALUES (201, 9003, 'webhook', '1');
 INSERT INTO problem_tag (problemtagid, eventid, tag, value) VALUES (201, 9003, 'webhook', '1');
 
--- Dashboard for Copying widgets
+-- Dashboards and widgets for Copy widget tests
 INSERT INTO dashboard (dashboardid, name, userid, private) VALUES (130, 'Dashboard for Copying widgets', 1, 1);
 INSERT INTO dashboard (dashboardid, name, userid, private) VALUES (131, 'Dashboard for Paste widgets', 1, 1);
 
