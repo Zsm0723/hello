@@ -165,7 +165,7 @@ class CDashboardElement extends CElement {
 	/**
 	 * Delete widget with the provided name.
 	 *
-	 * @return boolean
+	 * @return $this
 	 */
 	public function deleteWidget($name) {
 		$this->query('xpath:.//div[contains(@class, "dashbrd-grid-widget-head")]/h4[text()="'.$name.
@@ -177,7 +177,7 @@ class CDashboardElement extends CElement {
 	/**
 	 * Copy widget with the provided name.
 	 *
-	 * @return boolean
+	 * @return $this
 	 */
 	public function copyWidget($name) {
 		$this->query('xpath:.//div[contains(@class, "dashbrd-grid-widget-head") or contains(@class, "dashbrd-grid-iterator-head")]/h4[text()="'.$name.
@@ -198,6 +198,19 @@ class CDashboardElement extends CElement {
 		if ($controls->query('xpath:.//nav[@class="dashbrd-edit"]')->one()->isDisplayed()) {
 			$controls->query('id:dashbrd-paste-widget')->one()->waitUntilClickable()->click(true);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Replace widget with the provided name to previously copied widget.
+	 * Dashboard should be in editing mode.
+	 *
+	 * @return $this
+	 */
+	public function replaceWidget($name) {
+		$this->query('xpath:.//div[contains(@class, "dashbrd-grid-widget-head") or contains(@class, "dashbrd-grid-iterator-head")]/h4[text()="'.$name.
+				'"]/../ul/li/button[@title="Actions"]')->asPopupButton()->one()->select('Paste');
 
 		return $this;
 	}
