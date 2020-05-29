@@ -2378,6 +2378,8 @@ INSERT INTO problem_tag (problemtagid, eventid, tag, value) VALUES (201, 9003, '
 INSERT INTO dashboard (dashboardid, name, userid, private) VALUES (130, 'Dashboard for Copying widgets', 1, 1);
 INSERT INTO dashboard (dashboardid, name, userid, private) VALUES (131, 'Dashboard for Paste widgets', 1, 1);
 
+INSERT INTO widget (widgetid, dashboardid, type, name, x, y, width, height) VALUES (174, 131, 'clock', 'Test widget for replace', 6, 0, 13, 8);
+
 INSERT INTO widget (widgetid, dashboardid, type, name, x, y, width, height) VALUES (150, 130, 'actionlog', 'Test copy Action log', 0, 0, 7, 6);
 INSERT INTO widget_field (widget_fieldid, widgetid, type, name, value_int) VALUES (90250, 150, 0, 'rf_rate', 10);
 INSERT INTO widget_field (widget_fieldid, widgetid, type, name, value_int) VALUES (90251, 150, 0, 'show_lines', 3);
